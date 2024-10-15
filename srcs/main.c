@@ -6,6 +6,7 @@ int	main(int ac, char **av)
 	{
 		if (parsing_init(av))
 			exit(SUCCESS);
+		printf("AAAAAAAAAAAAAAA\n");
 	}
 	else
 		printf("Error: nb_philo time_life time_eat time_sleep [nb of plates]\n");

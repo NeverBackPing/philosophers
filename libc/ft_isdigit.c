@@ -101,7 +101,10 @@ int	ft_isdigit(char *str)
 	{
 		check = check_digit(str[i], str);
 		if (check == -1)
-			return (check = -1, check);
+		{
+			check = -1;
+			return (check);
+		}
 		i++;
 	}
 	return (check);
