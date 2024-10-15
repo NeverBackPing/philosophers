@@ -15,4 +15,7 @@
 # define STDIN 0
 # define STDOUT 1
 
+
+int		parsing_init(char **data);
+
 #endif

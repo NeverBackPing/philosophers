@@ -42,7 +42,7 @@ PRINTF_OBJS = $(PRINTF_SRC:.c=.o)
 
 ######################## 📁 #############################
 
-SRC = srcs/main.c
+SRC = srcs/main.c srcs/parsing.c
 
 SRCS = ${SRC} ${LIBC} ${PRINTF_SRC} ${GNL_SRC}
 
