@@ -15,22 +15,31 @@
 int	main(int ac, char **av)
 {
 	philo_data	datas;
-	thread_pid	philo;
+	thread_id	philo;
+	thread_monitor	monitor;
 
 	if (ac == 6 || ac == 5)
 	{
-		/* size_t	i;
+		size_t	i;
 
-		i = 0; */
+		i = 0;
+		pthread_mutex_init(&monitor.mutex, NULL);
 		if (parsing_init(av, &datas, &philo))
 		{
 			printf("Error: invalide data\n");
-			exit(SUCCESS);
+			return (SUCCESS);
 		}
-		/* while (i++ < datas.nb_philo)
-			pthread_join(philo.philo, NULL); */
+		while (i++ < datas.nb_philo)
+		{
+			if (pthread_create(&philo.philo, NULL, routine, NULL) != 0)
+				return (writer_error(ERR_THREAD), SUCCESS);
+		}
+		pthread_mutex_destroy(&monitor->mutex);
+		monitor_threads(&monitor, &philo, &datas);
+		pthread_join(&monitor.monitor, NULL);
+		printf("%s", GREEN_MSG);
 	}
 	else
 		printf("%s <./program philo life eat sleep think [plates]>\n", RED);
-	exit(SUCCESS);
+	return (SUCCESS);
 }

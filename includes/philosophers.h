@@ -24,10 +24,12 @@
 
 # define FAIL 1
 # define RED "\033[31mError:\033[0m"
+# define GREEN_MSG "\033[0;34mAll the philosophers have eaten\033[0;34m"
 # define SUCCESS 0
 # define STDERR 2
 # define STDIN 0
 # define STDOUT 1
+# define ERR_THREAD "Error: failed to create thread\n"
 
 /*Keep data during the parsing*/
 typedef struct	philo_data
@@ -41,15 +43,27 @@ typedef struct	philo_data
 	size_t	nb_eat;
 }	philo_data;
 
-//NOTE:
-/* Faire un monitor un autre thread pour
- dire aux autres qu'un philosophe est mort*/
-
-typedef struct	thread_pid
+typedef struct	thread_id
 {
 	pthread_t	philo;
-}	thread_pid;
+	int			philo_id;
+}	thread_id;
 
-int		parsing_init(char **data, philo_data *datas, thread_pid *hilo);
+typedef struct	thread_monitor
+{
+	pthread_t	monitor;
+	pthread_mutex_t	mutex;
+}	thread_monitor;
+
+//Monitor
+void	*manage(thread_id *philo, philo_data *datas);
+int		monitor_threads(thread_monitor	*monitor, thread_id	*philo, philo_data *datas);
+//Parsing
+int		parsing_init(char **data, philo_data *datas, thread_id *philo);
+//Routines
+void	*routine(thread_id	*philo, philo_data *datas);
+//Utils
+size_t	ft_strlen(const char *s)';'
+void	writer_error(char *message);
 
 #endif

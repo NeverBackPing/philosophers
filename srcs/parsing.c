@@ -42,9 +42,6 @@ long	ft_atol(const char *str)
 
 void	add_number(char *data, int code, philo_data	*datas)
 {
-	int	i;
-
-	i = code;
 	if (code == 1)
 		datas->nb_philo = ft_atol(data);
 	if (code == 2)
@@ -59,19 +56,11 @@ void	add_number(char *data, int code, philo_data	*datas)
 		datas->nb_eat = ft_atol(data);
 }
 
-void	*routine()
-{
-	printf("AHHAHAHAHAHAHAHAAHH\n");
-	return (SUCCESS);
-}
-
-int	parsing_init(char **data, philo_data *datas, thread_pid *philo)
+int	parsing_init(char **data, philo_data *datas, thread_id *philo)
 {
 	size_t	i;
-	size_t	j;
 
 	i = 1;
-	j = 0;
 	while (data[i] != NULL)
 	{
 		if (ft_atol(data[i]) <= 0)
@@ -79,10 +68,5 @@ int	parsing_init(char **data, philo_data *datas, thread_pid *philo)
 		add_number(data[i], i, datas);
 		i++;
 	}
-	i = 0;
-	while (i++ < datas->nb_philo)
-		pthread_create(&philo->philo, NULL, routine, NULL);
-	while (j++ < datas->nb_philo)
-			pthread_join(philo->philo, NULL);
 	return (SUCCESS);
 }
