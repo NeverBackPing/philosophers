@@ -40,7 +40,7 @@ long	ft_atol(const char *str)
 	return (number * sign);
 }
 
-void	add_number(char *data, int code, philo_data	*datas)
+void	add_number(char *data, int code, t_philo_data	*datas)
 {
 	if (code == 1)
 		datas->nb_philo = ft_atol(data);
@@ -56,7 +56,7 @@ void	add_number(char *data, int code, philo_data	*datas)
 		datas->nb_eat = ft_atol(data);
 }
 
-int	parsing_init(char **data, philo_data *datas, thread_id *philo)
+int	parsing_init(char **data, t_philo_data *datas)
 {
 	size_t	i;
 

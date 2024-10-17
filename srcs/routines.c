@@ -1,14 +1,14 @@
 #include "../includes/philosophers.h"
 
-void	*routine(thread_id	*philo, philo_data *datas)
+void	*routine(void *args)
 {
-	size_t	i;
+	t_thread_id *philo = (t_thread_id *)args;
 
-	pthread_mutex_lock(&monitor->mutex);
-	i = 0;
-	printf("AHHAHAHAHAHAHAHAAHH\n");
-	while (i++ < datas->nb_philo)
-			pthread_join(philo->philo, NULL);
-	pthread_mutex_unlock(&monitor->mutex);
+	usleep(1);
+	printf("Je verouille\n");
+	pthread_mutex_lock(&philo->mutex);
+	printf("HEllo\n");
+	pthread_mutex_unlock(&philo->mutex);
+	printf("liberer\n");
 	return (SUCCESS);
 }

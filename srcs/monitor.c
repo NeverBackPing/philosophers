@@ -1,13 +1,15 @@
 #include "../includes/philosophers.h"
 
-void	*manage(thread_id *philo, philo_data *datas)
+void	*manage(void *args)
 {
+	t_thread_id *philo = (t_thread_id *)args;
+	pthread_join(philo->monitor, NULL);
 	return (SUCCESS);
 }
 
-int	monitor_threads(thread_monitor	*monitor, thread_id	*philo, philo_data *datas)
+int	monitor_threads(t_thread_id *philo)
 {
-	if (pthread_create(monitor->monitor, NULL, manage, NULL) != 0)
+	if (pthread_create(&philo->monitor, NULL, manage, &philo) != 0)
 				return (writer_error(ERR_THREAD), SUCCESS);
 	return (SUCCESS);
 }
