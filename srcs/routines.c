@@ -6,9 +6,9 @@ void	*routine(void *args)
 
 	usleep(1);
 	printf("Je verouille\n");
-	pthread_mutex_lock(&philo->mutex);
+	pthread_mutex_lock(philo->write_lock);
 	printf("HEllo\n");
-	pthread_mutex_unlock(&philo->mutex);
+	pthread_mutex_unlock(philo->write_lock);
 	printf("liberer\n");
 	return (SUCCESS);
 }

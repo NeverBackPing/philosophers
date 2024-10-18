@@ -14,3 +14,8 @@ void	writer_error(char *message)
 {
 	write(STDERR , message, ft_strlen(message));
 }
+
+pthread_mutex_t	*allocate_mutex(void)
+{
+	return ((pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)));
+}

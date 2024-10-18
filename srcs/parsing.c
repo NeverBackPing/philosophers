@@ -40,10 +40,14 @@ long	ft_atol(const char *str)
 	return (number * sign);
 }
 
-void	add_number(char *data, int code, t_philo_data	*datas)
+int	add_number(char *data, int code, t_philo_data	*datas)
 {
 	if (code == 1)
+	{
 		datas->nb_philo = ft_atol(data);
+		if (datas->nb_philo > 200)
+			return (FAIL);
+	}
 	if (code == 2)
 		datas->life = ft_atol(data);
 	if (code == 3)
@@ -54,6 +58,7 @@ void	add_number(char *data, int code, t_philo_data	*datas)
 		datas->time_think = ft_atol(data);
 	if (code == 6)
 		datas->nb_eat = ft_atol(data);
+	return (SUCCESS);
 }
 
 int	parsing_init(char **data, t_philo_data *datas)
@@ -65,7 +70,8 @@ int	parsing_init(char **data, t_philo_data *datas)
 	{
 		if (ft_atol(data[i]) <= 0)
 			return (FAIL);
-		add_number(data[i], i, datas);
+		if (add_number(data[i], i, datas))
+			return (FAIL);
 		i++;
 	}
 	return (SUCCESS);

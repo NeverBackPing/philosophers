@@ -35,6 +35,7 @@
 typedef struct	t_philo_data
 {
 	/*Datas in milliseconds 1 sec = 1000 sec*/
+	size_t	last_meal;
 	size_t	time_eat;
 	size_t	life;
 	size_t	time_sleep;
@@ -45,14 +46,31 @@ typedef struct	t_philo_data
 
 typedef struct	t_thread_id
 {
-	pthread_t		philo;
-	pthread_t		monitor;
+	//Philosophers
+	pthread_t		philo; //threads
 	int				philo_id;
-	pthread_mutex_t	mutex;
 
+	int				eating;
+	int				meals_eaten;
+
+	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*write_lock;
+	pthread_mutex_t	*dead_lock;
+	pthread_mutex_t	*meal_lock;
+
+	//For the monitoring thread
+	pthread_t		monitor; //thread
+	pthread_mutex_t	dead;
+	pthread_mutex_t	meal;
+	pthread_mutex_t	write;
+	int				dead_flag;
+
+	//Data input
 	t_philo_data	datas;
 }	t_thread_id;
-
+//MAIN
+int		malloc_mutex(t_thread_id *philo);
 //Monitor
 void	*manage(void *data);
 int		monitor_threads(t_thread_id *philo);
@@ -63,4 +81,5 @@ void	*routine(void *data);
 //Utils
 size_t	ft_strlen(const char *s);
 void	writer_error(char *message);
+pthread_mutex_t	*allocate_mutex(void);
 #endif
