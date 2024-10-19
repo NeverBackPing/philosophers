@@ -12,26 +12,6 @@
 
 #include "../includes/philosophers.h"
 
-int	malloc_mutex(t_thread_id *philo)
-{
-	philo->r_fork = allocate_mutex();
-	if (philo->r_fork == NULL)
-		return (FAIL);
-	philo->l_fork = allocate_mutex();
-	if (philo->l_fork == NULL)
-		return (FAIL);
-	philo->write_lock = allocate_mutex();
-	if (philo->write_lock == NULL)
-		return (FAIL);
-	philo->dead_lock = allocate_mutex();
-	if (philo->dead_lock == NULL)
-		return (FAIL);
-	philo->meal_lock = allocate_mutex();
-	if (philo->meal_lock == NULL)
-		return (FAIL);
-	return(SUCCESS);
-}
-
 int	main(int ac, char **av)
 {
 	t_philo_data	datas;
@@ -42,25 +22,22 @@ int	main(int ac, char **av)
 		size_t	i;
 
 		i = 0;
-		if (parsing_init(av, &datas))
+		if (parsing_init(av, &datas, &philo))
 			return (printf("Error: invalide data\n"), SUCCESS);
 		if (malloc_mutex(&philo))
 			return (SUCCESS);
 		if (pthread_mutex_init(philo.write_lock, NULL))
 			printf("Error: pthread_mutex_init\n");
-		while (i < datas.nb_philo)
+		monitor_threads(&philo);
+		while (i++ < datas.nb_philo)
 		{
+			philo.philo_id++;
 			if (pthread_create(&philo.philo, NULL, routine, &philo) != 0)
 				return (writer_error(ERR_THREAD), SUCCESS);
-			pthread_join(philo.philo, NULL);
-			i++;
 		}
-		monitor_threads(&philo);
-		pthread_mutex_destroy(philo.write_lock);
-		//pthread_mutex_destroy(philo.dead_lock);
-		//pthread_mutex_destroy(philo.meal_lock);
-		//pthread_mutex_destroy(philo.l_lock);
-		//pthread_mutex_destroy(philo.r_lock);
+		if (pthread_join(philo.monitor, NULL));
+			return (SUCCESS);
+		destroy_mutex(&philo);
 		printf("%s", EATS);
 	}
 	else

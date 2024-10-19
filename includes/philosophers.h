@@ -20,6 +20,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <time.h>
 # include <unistd.h>
 
 # define FAIL 1
@@ -75,11 +76,13 @@ int		malloc_mutex(t_thread_id *philo);
 void	*manage(void *data);
 int		monitor_threads(t_thread_id *philo);
 //Parsing
-int		parsing_init(char **data, t_philo_data *datas);
+int	parsing_init(char **data, t_philo_data *datas, t_thread_id *philo);
 //Routines
+int		ft_usleep(size_t milliseconds);
 void	*routine(void *data);
 //Utils
-size_t	ft_strlen(const char *s);
+size_t	get_current_time ( void );
 void	writer_error(char *message);
-pthread_mutex_t	*allocate_mutex(void);
+void	destroy_mutex(t_thread_id *philo);
+int		malloc_mutex(t_thread_id *philo);
 #endif
