@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjossain <sjossain@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/21 13:46:29 by sjossain          #+#    #+#             */
+/*   Updated: 2024/10/21 13:46:29 by sjossain         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philosophers.h"
 
 
@@ -15,7 +27,7 @@ void	writer_error(char *message)
 	size_t	len;
 
 	len = 0;
-	while (s[len] != '\0')
+	while (message[len] != '\0')
 		len++;
 	write(STDERR , message, len);
 }

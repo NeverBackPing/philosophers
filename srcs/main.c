@@ -27,18 +27,18 @@ int	main(int ac, char **av)
 		if (malloc_mutex(&philo))
 			return (SUCCESS);
 		if (pthread_mutex_init(philo.write_lock, NULL))
-			printf("Error: pthread_mutex_init\n");
+			return (printf("Error: pthread_mutex_init\n"), SUCCESS);
 		monitor_threads(&philo);
 		while (i++ < datas.nb_philo)
 		{
 			philo.philo_id++;
-			if (pthread_create(&philo.philo, NULL, routine, &philo) != 0)
+			if (pthread_create(&philo.philo[i], NULL, routine, &philo) != 0)
 				return (writer_error(ERR_THREAD), SUCCESS);
 		}
 		if (pthread_join(philo.monitor, NULL));
 			return (SUCCESS);
 		destroy_mutex(&philo);
-		printf("%s", EATS);
+		printf("%s\n", EATS);
 	}
 	else
 		printf("%s <./program philo life eat sleep think [plates]>\n", RED);

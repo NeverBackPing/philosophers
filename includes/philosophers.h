@@ -25,7 +25,7 @@
 
 # define FAIL 1
 # define RED "\033[31mError:\033[0m"
-# define EATS "\033[0;34mAll the philosophers have eaten\033[0;34m\n"
+# define EATS "\033[0;34mAll the philosophers have eaten\033[0;34m"
 # define SUCCESS 0
 # define STDERR 2
 # define STDIN 0
@@ -36,40 +36,42 @@
 typedef struct	t_philo_data
 {
 	/*Datas in milliseconds 1 sec = 1000 sec*/
-	size_t	last_meal;
-	size_t	time_eat;
-	size_t	life;
-	size_t	time_sleep;
-	size_t	time_think;
-	size_t	nb_philo;
-	size_t	nb_eat;
+	size_t			time_eat;
+	size_t			life;
+	size_t			time_sleep;
+	size_t			time_think;
+	size_t			nb_philo;
+	size_t			nb_eat;
+	t_thread_id		philo[200];
+	pthread_mutex_t	write;
+	int				philo_id;
+	t_monitor		monitor;
 }	t_philo_data;
+
+typedef struct	t_monitor
+{
+	pthread_t		monitor;
+	bool			dead;
+	t_philo_data	philo_data;
+} t_monitor;
 
 typedef struct	t_thread_id
 {
 	//Philosophers
 	pthread_t		philo; //threads
-	int				philo_id;
+	int				philo_id; // i
+	size_t			last_meal; // 0
+	int				eating; // 0
+	int				meals_eaten; // 0
 
-	int				eating;
-	int				meals_eaten;
-
-	pthread_mutex_t	*r_fork;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*write_lock;
-	pthread_mutex_t	*dead_lock;
-	pthread_mutex_t	*meal_lock;
-
-	//For the monitoring thread
-	pthread_t		monitor; //thread
-	pthread_mutex_t	dead;
-	pthread_mutex_t	meal;
-	pthread_mutex_t	write;
-	int				dead_flag;
+	// un philo une fork
+	size_t			nb_eat; // 0
+	pthread_mutex_t	*fork; //init
 
 	//Data input
 	t_philo_data	datas;
 }	t_thread_id;
+
 //MAIN
 int		malloc_mutex(t_thread_id *philo);
 //Monitor
