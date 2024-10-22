@@ -59,8 +59,6 @@ bool	init_data(char *data, int code, t_pars *pars)
 		pars->time_think = ft_atol(data);
 	if (code == 6)
 		pars->nb_eat = ft_atol(data);
-	else
-		pars->nb_eat = 0;
 	return (false);
 }
 
@@ -76,6 +74,8 @@ bool	parsing_init(char **data, t_pars *pars)
 		if (init_data(data[i], i, pars))
 			return (true);
 		i++;
+		if (data[i] == NULL && i == 6)
+			pars->nb_eat = 0;
 	}
 	return (false);
 }

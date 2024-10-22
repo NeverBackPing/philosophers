@@ -12,7 +12,7 @@
 
 #include "../includes/philosophers.h"
 
-int	ft_usleep(size_t milliseconds)
+/* int	ft_usleep(size_t milliseconds)
 {
 	size_t	start;
 
@@ -39,4 +39,4 @@ void	*routine(void *args)
 	while (i++ < philo->datas.nb_philo)
 		pthread_join(philo->philo, NULL);
 	return (SUCCESS);
-}
+} */
