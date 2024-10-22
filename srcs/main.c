@@ -12,10 +12,19 @@
 
 #include "../includes/philosophers.h"
 
+
+void init_philo(t_philo_data *philo,int i)
+{
+	philo->id = i;
+	philo->time_die = philo->philo.
+}
+
 int	main(int ac, char **av)
 {
-	t_philo_data	datas;
-	t_thread_id		philo;
+	t_philo			philo;
+	t_pars			pars;
+	t_pars			data;
+	t_monitor		monitor;
 
 	if (ac == 6 || ac == 5)
 	{
@@ -24,20 +33,20 @@ int	main(int ac, char **av)
 		i = 0;
 		if (parsing_init(av, &datas, &philo))
 			return (printf("Error: invalide data\n"), SUCCESS);
-		if (malloc_mutex(&philo))
-			return (SUCCESS);
-		if (pthread_mutex_init(philo.write_lock, NULL))
-			return (printf("Error: pthread_mutex_init\n"), SUCCESS);
-		monitor_threads(&philo);
-		while (i++ < datas.nb_philo)
+		//if (pthread_mutex_init(&philo.fork, NULL))
+			//return (printf("Error: pthread_mutex_init\n"), SUCCESS);
+		//monitor_threads(&philo);
+		while (i++ < (size_t)ft_atol(av[1]))
 		{
-			philo.philo_id++;
-			if (pthread_create(&philo.philo[i], NULL, routine, &philo) != 0)
-				return (writer_error(ERR_THREAD), SUCCESS);
+			philo.philo[i] = {ft_atol(av[2]), ft_atol(av[3]), ft_atol(av[4]), ft_atol(av[5]), ft_atol(av[6])};
+			/* if (pthread_create(&philo.philo[i], NULL, routine, &philo{,,,,}))
+				return (writer_error(ERR_THREAD), SUCCESS); */
 		}
-		if (pthread_join(philo.monitor, NULL));
+		printf("ID: %ld | die : %ld | eat : %ld | sleep : %ld | meat : %ld\n",philo.datas[0].id, philo.datas[0].time_die ,  philo.datas[0].time_eat, philo.datas[0].time_sleep , philo.datas[0].time_think, philo.datas[0].nb_eat);
+		printf("ID: %ld | die : %ld | eat : %ld | sleep : %ld | meat : %ld\n",philo.datas[1].id,  philo.datas[1].time_die ,  philo.datas[1].time_eat, philo.datas[1].time_sleep , philo.datas[1].time_think, philo.datas[1].nb_eat);
+		if (pthread_join(monitor.monitor, NULL));
 			return (SUCCESS);
-		destroy_mutex(&philo);
+		pthread_mutex_destroy(&philo.fork);
 		printf("%s\n", EATS);
 	}
 	else

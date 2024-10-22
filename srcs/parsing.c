@@ -40,42 +40,43 @@ long	ft_atol(const char *str)
 	return (number * sign);
 }
 
-int	add_number(char *data, int code, t_philo_data *datas)
+
+bool	init_data(char *data, int code, t_pars *pars)
 {
 	if (code == 1)
 	{
-		datas->nb_philo = ft_atol(data);
-		if (datas->nb_philo > 200)
-			return (FAIL);
+		pars->nb_philo = ft_atol(data);
+		if (pars->nb_philo > 200)
+			return (true);
 	}
 	if (code == 2)
-		datas->life = ft_atol(data);
+		pars->time_die = ft_atol(data);
 	if (code == 3)
-		datas->time_eat = ft_atol(data);
+		pars->time_eat = ft_atol(data);
 	if (code == 4)
-		datas->time_sleep = ft_atol(data);
+		pars->time_sleep = ft_atol(data);
 	if (code == 5)
-		datas->time_think = ft_atol(data);
+		pars->time_think = ft_atol(data);
 	if (code == 6)
-		datas->nb_eat = ft_atol(data);
+		pars->nb_eat = ft_atol(data);
 	else
-		datas->nb_eat = 0;
-	return (SUCCESS);
+		pars->nb_eat = 0;
+	return (false);
 }
 
-int	parsing_init(char **data, t_philo_data *datas, t_thread_id *philo)
+bool	parsing_init(char **data, t_pars *pars)
 {
 	size_t	i;
 
 	i = 1;
-	philo->philo_id = 0;
 	while (data[i] != NULL)
 	{
 		if (ft_atol(data[i]) <= 0)
-			return (FAIL);
-		if (add_number(data[i], i, datas))
-			return (FAIL);
+			return (true);
+		if (init_data(data[i], i, pars))
+			return (true);
 		i++;
 	}
-	return (SUCCESS);
+	return (false);
 }
+

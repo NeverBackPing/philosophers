@@ -31,32 +31,3 @@ void	writer_error(char *message)
 		len++;
 	write(STDERR , message, len);
 }
-
-void	destroy_mutex(t_thread_id *philo)
-{
-	pthread_mutex_destroy(philo->write_lock);
-	pthread_mutex_destroy(philo->dead_lock);
-	pthread_mutex_destroy(philo->meal_lock);
-	pthread_mutex_destroy(philo->l_fork);
-	pthread_mutex_destroy(philo->r_fork);
-}
-
-int	malloc_mutex(t_thread_id *philo)
-{
-	philo->r_fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (philo->r_fork == NULL)
-		return (FAIL);
-	philo->l_fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (philo->l_fork == NULL)
-		return (FAIL);
-	philo->write_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (philo->write_lock == NULL)
-		return (FAIL);
-	philo->dead_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (philo->dead_lock == NULL)
-		return (FAIL);
-	philo->meal_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (philo->meal_lock == NULL)
-		return (FAIL);
-	return(SUCCESS);
-}
