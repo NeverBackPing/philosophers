@@ -42,9 +42,12 @@ void	writer_error(char *message)
 	write(STDERR , message, len);
 }
 
-void	init_philo(t_philo philo, int identifier)
+bool	init_philo(t_philo philo, int identifier)
 {
 	philo.id = identifier;
 	philo.last_meal = 0;
 	philo.nb_meal = 0;
+	if (pthread_mutex_init(&philo.fork, NULL))
+			return (printf("%s pthread_mutex_init\n", RED), true);
+	return (false);
 }

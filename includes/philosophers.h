@@ -40,7 +40,7 @@ typedef struct	t_pars
 	size_t			nb_philo;
 	size_t			time_die;
 	size_t			time_eat;
-	size_t			time_sleep;
+	size_t			 rush time_sleep;
 	size_t			time_think;
 	size_t			nb_eat;
 }	t_pars;
@@ -71,7 +71,7 @@ typedef struct	t_data
 
 //Monitor
 //void	*manage(void *data);
-//int		monitor_threads(t_thread_id *philo);
+int		monitor_threads(t_data *data);
 //Parsing
 long	ft_atol(const char *str);
 bool	parsing_init(char **data, t_pars *pars);
@@ -79,7 +79,7 @@ bool	parsing_init(char **data, t_pars *pars);
 //int		ft_usleep(size_t milliseconds);
 void	*routine(void *data);
 //Utils
-void	init_philo(t_philo philo, int identifier);
+bool	init_philo(t_philo philo, int identifier);
 size_t	get_current_time ( void );
 void	writer_error(char *message);
 #endif

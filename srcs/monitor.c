@@ -12,21 +12,21 @@
 
 #include "../includes/philosophers.h"
 
-/* void	*manage(void *args)
+void	*manager(void *args)
 {
-	t_thread_id *philo = (t_thread_id *)args;
+	t_data	*data;
 
-	printf("name: %ld\n", philo->datas.nb_philo);
-	while (1)
-	{
-		NULL;
-	}
+	data = (t_data *)args;
+	printf("Manager: %d\n", data->dead);
 	return (SUCCESS);
 }
 
-int	monitor_threads(t_thread_id *philo)
+int	monitor_threads(t_data *data)
 {
-	if (pthread_create(&philo->monitor, NULL, manage, &philo) != 0)
+	data->dead = false;
+	if (pthread_create(&data->monitor, NULL, manager, &data) != 0)
 		return (writer_error(ERR_THREAD), SUCCESS);
+	if (pthread_join(data->monitor, NULL))
+			return (SUCCESS);
 	return (SUCCESS);
-} */
+}
