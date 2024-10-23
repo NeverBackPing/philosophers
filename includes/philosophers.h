@@ -40,9 +40,9 @@ typedef struct	t_pars
 	size_t			nb_philo;
 	size_t			time_die;
 	size_t			time_eat;
-	size_t			 rush time_sleep;
+	size_t			time_sleep;
 	size_t			time_think;
-	size_t			nb_eat;
+	int				nb_eat;
 }	t_pars;
 
 /*struct for philo*/

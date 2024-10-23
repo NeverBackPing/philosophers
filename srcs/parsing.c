@@ -75,7 +75,7 @@ bool	parsing_init(char **data, t_pars *pars)
 			return (true);
 		i++;
 		if (data[i] == NULL && i == 6)
-			pars->nb_eat = 0;
+			pars->nb_eat = -1;
 	}
 	return (false);
 }
