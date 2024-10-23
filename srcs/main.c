@@ -12,41 +12,29 @@
 
 #include "../includes/philosophers.h"
 
-
-/* void init_philo(t_philo_data *philo,int i)
-{
-	philo->id = i;
-	philo->time_die = philo->philo.
-} */
-
 int	main(int ac, char **av)
 {
-	//t_philo			philo;
-	t_pars			pars;
-	/*t_pars			data;
-	t_monitor		monitor; */
+	t_pars	pars;
+	t_data	data;
+	size_t	i;
 
 	if (ac == 6 || ac == 7)
 	{
-		//size_t	i;
-
-		//i = 0;
+		i = 1;
 		if (parsing_init(av, &pars))
 			return (printf("\033[31mError:\033[0m Invalide data\n"), SUCCESS);
-		printf("philo : %ld | time_to_die : %ld | time_to_eat : %ld |  time_to_sleep : %ld | time_to_think : %ld | meal : %ld\n", pars.nb_philo,  pars.time_die, pars.time_eat, pars.time_sleep, pars.time_think, pars.nb_eat);
-		/*if (pthread_mutex_init(&philo.fork, NULL))
+		if (pthread_mutex_init(&data.write, NULL))
 			return (printf("Error: pthread_mutex_init\n"), SUCCESS);
 		//monitor_threads(&philo);
-		while (i++ < (size_t)ft_atol(av[1]))
+		while (i++ < pars.nb_philo + 1)
 		{
-			//add 
-			philo.philo[i] = {ft_atol(av[2]), ft_atol(av[3]), ft_atol(av[4]), ft_atol(av[5]), ft_atol(av[6])};
-			if (pthread_create(&philo.philo[i], NULL, routine, &philo))
+			init_philo(data.philo[i], i);
+			if (pthread_create(&data.philo[i].philo, NULL, routine, &data.philo[i]))
 				return (writer_error(ERR_THREAD), SUCCESS);
 		}
 		if (pthread_join(monitor.monitor, NULL));
 			return (SUCCESS);
-		pthread_mutex_destroy(&philo.fork);*/
+		pthread_mutex_destroy(&data.write);
 		printf("%s\n", EATS);
 	}
 	else

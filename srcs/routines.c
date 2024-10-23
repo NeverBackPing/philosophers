@@ -12,16 +12,6 @@
 
 #include "../includes/philosophers.h"
 
-/* int	ft_usleep(size_t milliseconds)
-{
-	size_t	start;
-
-	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-		usleep(500);
-	return (0);
-}
-
 void	*routine(void *args)
 {
 	size_t	i;
@@ -39,4 +29,4 @@ void	*routine(void *args)
 	while (i++ < philo->datas.nb_philo)
 		pthread_join(philo->philo, NULL);
 	return (SUCCESS);
-} */
+}

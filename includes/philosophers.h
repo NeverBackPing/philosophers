@@ -56,18 +56,16 @@ typedef struct	t_philo
 }	t_philo;
 
 /*philo monitoring*/
-typedef struct	t_monitor
-{
-	t_pars 			pars;
-	pthread_t		monitor;
-	bool			dead;
-}	t_monitor;
-
 typedef struct	t_data
 {
-	t_monitor		monitor;
-	t_pars			pars;
+	//monitor philo
+	pthread_t		monitor;
+	bool			dead;
+	//struct philo
 	t_philo			philo[200];
+	//data intput
+	t_pars			pars;
+	//mange writing
 	pthread_mutex_t	write;
 }	t_data;
 
@@ -79,8 +77,9 @@ long	ft_atol(const char *str);
 bool	parsing_init(char **data, t_pars *pars);
 //Routines
 //int		ft_usleep(size_t milliseconds);
-//void	*routine(void *data);
+void	*routine(void *data);
 //Utils
+void	init_philo(t_philo philo, int identifier);
 size_t	get_current_time ( void );
 void	writer_error(char *message);
 #endif
