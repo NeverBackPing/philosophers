@@ -17,16 +17,18 @@ void	*routine(void *args)
 	t_philo	*philo;
 
 	philo = (t_philo *)args;
+	/*pthread_mutex_lock(&philo->fork);
+	pthread_mutex_unlock(&philo->fork);*/
 	while (1)
 	{
 		if (philo->id % 2 == 0)
 		{
-			printf("philo %d: 🍜\n", philo->id);
+			//printf("philo %d: 🍜\n", philo->id);
 		}
 		else
 		{
-			printf("philo %d : I sleep 😴\n", philo->id);
-			ft_usleep(philo->data->pars.time_sleep);
+			//printf("philo %d : I sleep 😴\n", philo->id);
+			ft_usleep(philo->pars->time_sleep);
 		}
 	}
 	return (SUCCESS);

@@ -17,7 +17,6 @@ void	*manage(void *args)
 	t_data	*data;
 
 	data = (t_data *)args;
-	printf("Manager: %s\n", data->dead ? "true" : "false");
 	while (1)
 	{
 		

@@ -43,7 +43,7 @@ typedef struct	s_pars
 {
 	/*Datas in milliseconds 1 sec = 1000 sec*/
 	uint8_t							nb_philo;
-	unsigned int					time_die;
+	unsigned int					time_die; //change en unsigned long tout
 	unsigned int					time_eat;
 	unsigned int					time_sleep;
 	unsigned int					time_think;
@@ -59,6 +59,7 @@ typedef struct	s_philo
 	pthread_t		philo;
 	pthread_mutex_t	fork;
 	t_data			*data;
+	t_pars			*pars;
 }	t_philo;
 
 /*philo monitoring*/
@@ -70,7 +71,7 @@ typedef struct	s_data
 	//struct philo
 	t_philo			philo[200];
 	//data intput
-	t_pars			pars;
+	t_pars			*pars;
 	//mange writing
 	pthread_mutex_t	write;
 }	t_data;
@@ -80,12 +81,12 @@ void			*manage(void *data);
 int				monitor_threads(t_data *data);
 //Parsing
 long			ft_atol(const char *str);
-bool			parsing_init(char **data, t_pars *pars);
+bool			parsing_init(char **argv, t_pars *pars, t_data *data);
 //Routines
 int				ft_usleep(unsigned int milliseconds);
 void			*routine(void *data);
 //Utils
-bool			init_philo(t_philo *philo, int identifier);
+bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
 unsigned int	get_current_time ( void );
 void			writer_error(char *message);
 void			join_thread(t_data	*data);

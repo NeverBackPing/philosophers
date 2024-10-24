@@ -62,7 +62,7 @@ uint8_t	ft_atoi_uint8(const char *str)
 	return (number);
 }
 
-bool	parsing_init(char **argv, t_pars *pars)
+bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 {
 	pars->nb_philo = ft_atoi_uint8(argv[1]);
 	pars->time_die = ft_atol(argv[2]);
@@ -78,5 +78,6 @@ bool	parsing_init(char **argv, t_pars *pars)
 	if (pars->time_die <= 0 || pars->time_eat <= 0 || pars->time_sleep <= 0
 	|| pars->time_think <= 0)
 		return (false);
+	data->pars = pars;
 	return (true);
 }

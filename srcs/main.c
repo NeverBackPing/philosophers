@@ -21,21 +21,23 @@ int	main(int ac, char **av)
 	if (ac != 6 && ac != 7)
 		return (writer_error(E), FAIL);
 	i = 0;
-	if (!parsing_init(av, &pars))
+	if (!parsing_init(av, &pars, &data))
 		return (writer_error(DATA_ERR), FAIL);
 	if (pthread_mutex_init(&data.write, NULL))
 		return (writer_error(MUTEX_ERR), FAIL);
-	while (i++ < pars.nb_philo)
+	while (i < pars.nb_philo)
 	{
-		if (!init_philo(&data.philo[i], i))
+		if (!init_philo(&data.philo[i], i, &data, &pars))
 		{
 			join_thread(&data);
 			return (pthread_mutex_destroy(&data.write), FAIL);
 		}
 		if (pthread_create(&data.philo[i].philo, NULL, routine, &data.philo[i]))
 			return (writer_error(ERR_THREAD), FAIL);
+		i++;
 	}
 	join_thread(&data);
+	exit(0);
 	monitor_threads(&data);
 	pthread_mutex_destroy(&data.write);
 	return (printf("%s\n", EATS), SUCCESS);

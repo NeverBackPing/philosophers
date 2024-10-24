@@ -25,7 +25,6 @@ int	ft_usleep(unsigned int milliseconds)
 {
 	unsigned int	start;
 
-printf("AAAAAAAAAAAAAA\n");	
 	start = get_current_time();
 	while ((get_current_time() - start) < milliseconds)
 		usleep(500);
@@ -42,13 +41,15 @@ void	writer_error(char *message)
 	write(STDERR , message, len);
 }
 
-bool	init_philo(t_philo *philo, int identifier)
+bool	init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars)
 {
-	philo->id = identifier;
+	philo->id = id + 1;
 	philo->last_meal = 0;
 	philo->nb_meal = 0;
 	if (pthread_mutex_init(&philo->fork, NULL))
 		return (writer_error(MUTEX_ERR), false);
+	philo->data = data;
+	philo->pars = pars;
 	return (true);
 }
 
@@ -57,7 +58,7 @@ void	join_thread(t_data *data)
 	size_t	i;
 
 	i = 0;
-	while (i < data->pars.nb_philo)
+	while (i < data->pars->nb_philo)
 	{
 		pthread_join(data->philo[i].philo, NULL);
 		i++;
