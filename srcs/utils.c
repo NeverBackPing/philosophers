@@ -12,20 +12,20 @@
 
 #include "../includes/philosophers.h"
 
-
-size_t	get_current_time ( void )
+unsigned int	get_current_time (void)
 {
-	struct  timeval 	time ;
+	struct	timeval	time ;
 
 	if (gettimeofday(&time, NULL ) == -1 )
-		write( 2 , "gettimeofday() error\n" , 22 );
+		write(2 , "\033[31mError:\033[0m gettimeofday()\n" , 22 );
 	return (time.tv_sec * 1000 + time.tv_usec / 1000 );
 }
 
-int	ft_usleep(size_t milliseconds)
+int	ft_usleep(unsigned int milliseconds)
 {
-	size_t	start;
+	unsigned int	start;
 
+printf("AAAAAAAAAAAAAA\n");	
 	start = get_current_time();
 	while ((get_current_time() - start) < milliseconds)
 		usleep(500);
@@ -34,7 +34,7 @@ int	ft_usleep(size_t milliseconds)
 
 void	writer_error(char *message)
 {
-	size_t	len;
+	unsigned int	len;
 
 	len = 0;
 	while (message[len] != '\0')
@@ -42,12 +42,24 @@ void	writer_error(char *message)
 	write(STDERR , message, len);
 }
 
-bool	init_philo(t_philo philo, int identifier)
+bool	init_philo(t_philo *philo, int identifier)
 {
-	philo.id = identifier;
-	philo.last_meal = 0;
-	philo.nb_meal = 0;
-	if (pthread_mutex_init(&philo.fork, NULL))
-			return (printf("%s pthread_mutex_init\n", RED), true);
-	return (false);
+	philo->id = identifier;
+	philo->last_meal = 0;
+	philo->nb_meal = 0;
+	if (pthread_mutex_init(&philo->fork, NULL))
+		return (writer_error(MUTEX_ERR), false);
+	return (true);
+}
+
+void	join_thread(t_data *data)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < data->pars.nb_philo)
+	{
+		pthread_join(data->philo[i].philo, NULL);
+		i++;
+	}
 }

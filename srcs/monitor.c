@@ -12,19 +12,23 @@
 
 #include "../includes/philosophers.h"
 
-void	*manager(void *args)
+void	*manage(void *args)
 {
 	t_data	*data;
 
 	data = (t_data *)args;
-	printf("Manager: %d\n", data->dead);
+	printf("Manager: %s\n", data->dead ? "true" : "false");
+	while (1)
+	{
+		
+	}
 	return (SUCCESS);
 }
 
 int	monitor_threads(t_data *data)
 {
-	data->dead = false;
-	if (pthread_create(&data->monitor, NULL, manager, &data) != 0)
+	data->dead = true;
+	if (pthread_create(&data->monitor, NULL, manage, data))
 		return (writer_error(ERR_THREAD), SUCCESS);
 	if (pthread_join(data->monitor, NULL))
 			return (SUCCESS);

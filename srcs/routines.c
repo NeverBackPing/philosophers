@@ -14,18 +14,20 @@
 
 void	*routine(void *args)
 {
-	size_t	i;
-	t_data	*data;
+	t_philo	*philo;
 
-	i = 0;
-	data = (t_data *)args;
-	printf("AAAAAAAAAAAAAAAAAAA\n");
-	/*while (1)
+	philo = (t_philo *)args;
+	while (1)
 	{
-		pthread_mutex_lock(philo->write_lock);
-		pthread_mutex_unlock(philo->write_lock);
-	}*/
-	while (i++ < data->pars.nb_philo)
-		pthread_join(data->philo[i].philo, NULL);
+		if (philo->id % 2 == 0)
+		{
+			printf("philo %d: 🍜\n", philo->id);
+		}
+		else
+		{
+			printf("philo %d : I sleep 😴\n", philo->id);
+			ft_usleep(philo->data->pars.time_sleep);
+		}
+	}
 	return (SUCCESS);
 }

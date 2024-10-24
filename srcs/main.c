@@ -16,26 +16,27 @@ int	main(int ac, char **av)
 {
 	t_pars	pars;
 	t_data	data;
-	size_t	i;
+	uint8_t	i;
 
-	if (ac == 6 || ac == 7)
+	if (ac != 6 && ac != 7)
+		return (writer_error(E), FAIL);
+	i = 0;
+	if (!parsing_init(av, &pars))
+		return (writer_error(DATA_ERR), FAIL);
+	if (pthread_mutex_init(&data.write, NULL))
+		return (writer_error(MUTEX_ERR), FAIL);
+	while (i++ < pars.nb_philo)
 	{
-		i = 1;
-		if (parsing_init(av, &pars))
-			return (printf("%s Invalide data\n", RED), SUCCESS);
-		if (pthread_mutex_init(&data.write, NULL))
-			return (printf("%s pthread_mutex_init\n", RED), SUCCESS);
-		while (i++ < pars.nb_philo + 1)
+		if (!init_philo(&data.philo[i], i))
 		{
-			init_philo(data.philo[i], i);
-			if (pthread_create(&data.philo[i].philo, NULL, routine, &data))
-				return (writer_error(ERR_THREAD), SUCCESS);
+			join_thread(&data);
+			return (pthread_mutex_destroy(&data.write), FAIL);
 		}
-		monitor_threads(&data);
-		pthread_mutex_destroy(&data.write);
-		printf("%s\n", EATS);
+		if (pthread_create(&data.philo[i].philo, NULL, routine, &data.philo[i]))
+			return (writer_error(ERR_THREAD), FAIL);
 	}
-	else
-		printf("%s <./program philo life eat sleep think [plates]>\n", RED);
-	return (SUCCESS);
+	join_thread(&data);
+	monitor_threads(&data);
+	pthread_mutex_destroy(&data.write);
+	return (printf("%s\n", EATS), SUCCESS);
 }
