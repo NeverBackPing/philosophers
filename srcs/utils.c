@@ -55,7 +55,7 @@ bool	init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars)
 
 void	join_thread(t_data *data)
 {
-	size_t	i;
+	uint8_t	i;
 
 	i = 0;
 	while (i < data->pars->nb_philo)

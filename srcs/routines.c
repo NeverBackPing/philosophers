@@ -12,6 +12,23 @@
 
 #include "../includes/philosophers.h"
 
+
+void	philo_pair(t_philo *philo)
+{
+	while (1)
+	{
+		pthread_mutex_lock(&philo->data->write);
+		pthread_mutex_lock(&philo->fork);
+		if (philo->id % 2 == 0)
+		{
+			printf("philo %d : I eat \n", philo->id);
+			ft_usleep(philo->pars->time_eat);
+		}
+		pthread_mutex_unlock(&philo->fork);
+		pthread_mutex_unlock(&philo->data->write);
+	}
+}
+
 void	*routine(void *args)
 {
 	t_philo	*philo;
@@ -19,11 +36,12 @@ void	*routine(void *args)
 	philo = (t_philo *)args;
 	/*pthread_mutex_lock(&philo->fork);
 	pthread_mutex_unlock(&philo->fork);*/
-	while (1)
+	while (true)
 	{
-		if (philo->id % 2 == 0)
+		if (philo->pars->nb_philo % 2 == 0)
 		{
 			//printf("philo %d: 🍜\n", philo->id);
+
 		}
 		else
 		{

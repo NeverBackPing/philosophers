@@ -12,7 +12,7 @@
 
 #include "../includes/philosophers.h"
 
-long	ft_atol(const char *str)
+/*long	ft_atol(const char *str)
 {
 	long	number;
 	int8_t	i;
@@ -39,6 +39,30 @@ long	ft_atol(const char *str)
 		number = number * 10 + (str[i++] - '0');
 	}
 	return (number * sign);
+}*/
+
+unsigned long	ft_atol_usigned(const char *str)
+{
+	unsigned long	number;
+	int8_t			i;
+
+	i = 0;
+	number = 0;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' ||
+			str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			return (0);
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		number = number * 10 + (str[i] - '0');
+		i++;
+	}
+	return (number);
 }
 
 uint8_t	ft_atoi_uint8(const char *str)
@@ -51,6 +75,12 @@ uint8_t	ft_atoi_uint8(const char *str)
 	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' ||
 			str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
 		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			return (0);
+		i++;
+	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		if (number > (UINT8_MAX / 10) ||
@@ -65,14 +95,14 @@ uint8_t	ft_atoi_uint8(const char *str)
 bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 {
 	pars->nb_philo = ft_atoi_uint8(argv[1]);
-	pars->time_die = ft_atol(argv[2]);
-	pars->time_eat = ft_atol(argv[3]);
-	pars->time_sleep = ft_atol(argv[4]);
-	pars->time_think = ft_atol(argv[5]);
+	pars->time_die = ft_atol_usigned(argv[2]);
+	pars->time_eat = ft_atol_usigned(argv[3]);
+	pars->time_sleep = ft_atol_usigned(argv[4]);
+	pars->time_think = ft_atol_usigned(argv[5]);
 	if (argv[6] == NULL)
 		pars->nb_eat = -1;
 	else
-		pars->nb_eat = ft_atol(argv[6]);
+		pars->nb_eat = ft_atol_usigned(argv[6]);
 	if (pars->nb_philo <= 0 || pars->nb_philo > 200)
 		return (false);
 	if (pars->time_die <= 0 || pars->time_eat <= 0 || pars->time_sleep <= 0

@@ -39,23 +39,23 @@
 typedef struct	s_data t_data;
 
 /*keep data inpout*/
-typedef struct	s_pars
+typedef struct		s_pars
 {
 	/*Datas in milliseconds 1 sec = 1000 sec*/
-	uint8_t							nb_philo;
-	unsigned int					time_die; //change en unsigned long tout
-	unsigned int					time_eat;
-	unsigned int					time_sleep;
-	unsigned int					time_think;
-	unsigned int					nb_eat;
+	uint8_t			nb_philo;
+	unsigned long	time_die;
+	unsigned long	time_eat;
+	unsigned long	time_sleep;
+	unsigned long	time_think;
+	unsigned long	nb_eat;
 }	t_pars;
 
 /*struct for philo*/
-typedef struct	s_philo
+typedef struct		s_philo
 {
-	uint8_t				id;
-	long			last_meal;
-	long			nb_meal;
+	uint8_t			id;
+	unsigned long	last_meal;
+	unsigned long	nb_meal;
 	pthread_t		philo;
 	pthread_mutex_t	fork;
 	t_data			*data;
@@ -63,7 +63,7 @@ typedef struct	s_philo
 }	t_philo;
 
 /*philo monitoring*/
-typedef struct	s_data
+typedef struct		s_data
 {
 	//monitor philo
 	pthread_t		monitor;
@@ -75,12 +75,11 @@ typedef struct	s_data
 	//mange writing
 	pthread_mutex_t	write;
 }	t_data;
-
 //Monitor
-void			*manage(void *data);
+void			destroy_mutex(t_data *data);
+void			join_thread(t_data	*data);
 int				monitor_threads(t_data *data);
 //Parsing
-long			ft_atol(const char *str);
 bool			parsing_init(char **argv, t_pars *pars, t_data *data);
 //Routines
 int				ft_usleep(unsigned int milliseconds);
@@ -89,5 +88,4 @@ void			*routine(void *data);
 bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
 unsigned int	get_current_time ( void );
 void			writer_error(char *message);
-void			join_thread(t_data	*data);
 #endif

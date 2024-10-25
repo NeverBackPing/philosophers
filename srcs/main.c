@@ -18,9 +18,9 @@ int	main(int ac, char **av)
 	t_data	data;
 	uint8_t	i;
 
+	i = 0;
 	if (ac != 6 && ac != 7)
 		return (writer_error(E), FAIL);
-	i = 0;
 	if (!parsing_init(av, &pars, &data))
 		return (writer_error(DATA_ERR), FAIL);
 	if (pthread_mutex_init(&data.write, NULL))
@@ -36,9 +36,7 @@ int	main(int ac, char **av)
 			return (writer_error(ERR_THREAD), FAIL);
 		i++;
 	}
-	join_thread(&data);
-	exit(0);
+	destroy_mutex(&data);
 	monitor_threads(&data);
-	pthread_mutex_destroy(&data.write);
 	return (printf("%s\n", EATS), SUCCESS);
 }
