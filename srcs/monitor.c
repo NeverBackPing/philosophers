@@ -22,7 +22,7 @@ void	destroy_mutex(t_data *data)
 		pthread_mutex_destroy(&data->philo[i].fork);
 		i++;
 	}
-	pthread_mutex_destroy(&data.write);
+	pthread_mutex_destroy(&data->write);
 }
 
 void	join_thread(t_data *data)
@@ -44,8 +44,8 @@ void	*monitor(void *args)
 	data = (t_data *)args;
 	while (true)
 	{
-		printf("manage : %d\n", data->dead);
 	}
+		printf("manage : %d\n", data->dead);
 	return (SUCCESS);
 }
 
