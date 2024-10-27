@@ -87,5 +87,6 @@ void			*routine(void *data);
 //Utils
 bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
 unsigned int	get_current_time ( void );
+void			think(t_philo *philo, t_data *data);
 void			writer_error(char *message);
 #endif

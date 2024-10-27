@@ -12,13 +12,38 @@
 
 #include "../includes/philosophers.h"
 
+void	writer_error(char *message)
+{
+	unsigned int	len;
+
+	len = 0;
+	while (message[len] != '\0')
+		len++;
+	write(STDERR , message, len);
+}
+
 unsigned int	get_current_time (void)
 {
 	struct	timeval	time ;
 
 	if (gettimeofday(&time, NULL ) == -1 )
-		write(2 , "\033[31mError:\033[0m gettimeofday()\n" , 22 );
-	return (time.tv_sec * 1000 + time.tv_usec / 1000 );
+		write(2 , "\033[31mError:\033[0m gettimeofday()\n" , 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+
+unsigned int	get_ms(void)
+{
+	struct	timeval	start;
+	struct	timeval	end;
+	unsigned int	secs;
+	unsigned int	usecs;
+
+	gettimeofday(&start, NULL);
+    gettimeofday(&end, NULL);
+    secs  = end.tv_sec  - start.tv_sec;
+    usecs = end.tv_usec - start.tv_usec;
+	return (secs * 1000 + usecs / 1000 );
 }
 
 int	ft_usleep(unsigned int milliseconds)
@@ -31,14 +56,13 @@ int	ft_usleep(unsigned int milliseconds)
 	return (0);
 }
 
-void	writer_error(char *message)
+void	think(t_philo *philo, t_data *data)
 {
-	unsigned int	len;
-
-	len = 0;
-	while (message[len] != '\0')
-		len++;
-	write(STDERR , message, len);
+	pthread_mutex_lock(&data->write);
+	printf(" ms: %u | Philo %d : I think 🏛️\n", get_current_time(), philo->id);
+	pthread_mutex_unlock(&data->write);
+	if (data->pars->nb_philo % 2 == 1)
+		ft_usleep(data->pars->time_think);
 }
 
 bool	init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars)
