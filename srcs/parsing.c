@@ -108,6 +108,7 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 	if (pars->time_die <= 0 || pars->time_eat <= 0 || pars->time_sleep <= 0
 	|| pars->time_think <= 0)
 		return (false);
+	pars->start_time = 0;
 	data->pars = pars;
 	return (true);
 }

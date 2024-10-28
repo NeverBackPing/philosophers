@@ -32,18 +32,13 @@ unsigned int	get_current_time (void)
 }
 
 
-unsigned int	get_ms(void)
+unsigned int	get_ms(t_data *data)
 {
-	struct	timeval	start;
-	struct	timeval	end;
-	unsigned int	secs;
-	unsigned int	usecs;
+	struct timeval time;
+	gettimeofday(&time, NULL);
 
-	gettimeofday(&start, NULL);
-    gettimeofday(&end, NULL);
-    secs  = end.tv_sec  - start.tv_sec;
-    usecs = end.tv_usec - start.tv_usec;
-	return (secs * 1000 + usecs / 1000 );
+	unsigned int current_time = (time.tv_sec * 1000 + time.tv_usec / 1000);
+	return (current_time - data->pars->start_time);
 }
 
 int	ft_usleep(unsigned int milliseconds)
@@ -56,10 +51,21 @@ int	ft_usleep(unsigned int milliseconds)
 	return (0);
 }
 
+
+void	start_time(t_data *data, t_pars *pars)
+{
+	pthread_mutex_lock(&data->write);
+	if (pars->start_time == 0)
+	{
+		pars->start_time = get_current_time ();
+	}
+	pthread_mutex_unlock(&data->write);
+}
+
 void	think(t_philo *philo, t_data *data)
 {
 	pthread_mutex_lock(&data->write);
-	printf(" ms: %u | Philo %d : I think 🏛️\n", get_current_time(), philo->id);
+	printf(" ms: %u | Philo %d : I think 🏛️\n", get_ms(data), philo->id);
 	pthread_mutex_unlock(&data->write);
 	if (data->pars->nb_philo % 2 == 1)
 		ft_usleep(data->pars->time_think);

@@ -48,6 +48,7 @@ typedef struct		s_pars
 	unsigned long	time_sleep;
 	unsigned long	time_think;
 	unsigned long	nb_eat;
+	unsigned int	start_time;
 }	t_pars;
 
 /*struct for philo*/
@@ -85,6 +86,8 @@ bool			parsing_init(char **argv, t_pars *pars, t_data *data);
 int				ft_usleep(unsigned int milliseconds);
 void			*routine(void *data);
 //Utils
+unsigned int	get_ms(t_data *data);
+void			start_time(t_data *data, t_pars *pars);
 bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
 unsigned int	get_current_time ( void );
 void			think(t_philo *philo, t_data *data);

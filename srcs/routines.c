@@ -88,9 +88,15 @@ void	*routine(void *args)
 
 	philo = (t_philo *)args;
 	data = philo->data;
+	start_time(data, philo->pars);
 	while (true)
 	{
-		think(philo, data);
+		//think(philo, data);
+		pthread_mutex_lock(&data->write);
+		usleep(500000);
+		printf(" ms: %u | Philo %d : I think 🏛️\n", get_ms(data), philo->id);
+		pthread_mutex_unlock(&data->write);
+		break ;
 	}
 	return (SUCCESS);
 }
