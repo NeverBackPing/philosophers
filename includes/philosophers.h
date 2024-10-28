@@ -76,6 +76,8 @@ typedef struct		s_data
 	//mange writing
 	pthread_mutex_t	write;
 }	t_data;
+//Main
+void			writer_error(char *message);
 //Monitor
 void			destroy_mutex(t_data *data);
 void			join_thread(t_data	*data);
@@ -83,13 +85,12 @@ int				monitor_threads(t_data *data);
 //Parsing
 bool			parsing_init(char **argv, t_pars *pars, t_data *data);
 //Routines
-int				ft_usleep(unsigned int milliseconds);
+bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
 void			*routine(void *data);
 //Utils
+int				ft_usleep(unsigned int milliseconds);
 unsigned int	get_ms(t_data *data);
 void			start_time(t_data *data, t_pars *pars);
-bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
 unsigned int	get_current_time ( void );
 void			think(t_philo *philo, t_data *data);
-void			writer_error(char *message);
 #endif

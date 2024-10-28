@@ -12,16 +12,6 @@
 
 #include "../includes/philosophers.h"
 
-void	writer_error(char *message)
-{
-	unsigned int	len;
-
-	len = 0;
-	while (message[len] != '\0')
-		len++;
-	write(STDERR , message, len);
-}
-
 unsigned int	get_current_time (void)
 {
 	struct	timeval	time ;
@@ -34,10 +24,11 @@ unsigned int	get_current_time (void)
 
 unsigned int	get_ms(t_data *data)
 {
-	struct timeval time;
+	struct timeval	time;
+	unsigned int	current_time;
 	gettimeofday(&time, NULL);
 
-	unsigned int current_time = (time.tv_sec * 1000 + time.tv_usec / 1000);
+	current_time = (time.tv_sec * 1000 + time.tv_usec / 1000);
 	return (current_time - data->pars->start_time);
 }
 
@@ -56,29 +47,15 @@ void	start_time(t_data *data, t_pars *pars)
 {
 	pthread_mutex_lock(&data->write);
 	if (pars->start_time == 0)
-	{
-		pars->start_time = get_current_time ();
-	}
+		pars->start_time = get_current_time();
 	pthread_mutex_unlock(&data->write);
 }
 
 void	think(t_philo *philo, t_data *data)
 {
 	pthread_mutex_lock(&data->write);
-	printf(" ms: %u | Philo %d : I think 🏛️\n", get_ms(data), philo->id);
+	printf("%u %d is thinking 🏛️\n", get_ms(data), philo->id + 1);
 	pthread_mutex_unlock(&data->write);
 	if (data->pars->nb_philo % 2 == 1)
 		ft_usleep(data->pars->time_think);
-}
-
-bool	init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars)
-{
-	philo->id = id + 1;
-	philo->last_meal = 0;
-	philo->nb_meal = 0;
-	if (pthread_mutex_init(&philo->fork, NULL))
-		return (writer_error(MUTEX_ERR), false);
-	philo->data = data;
-	philo->pars = pars;
-	return (true);
 }

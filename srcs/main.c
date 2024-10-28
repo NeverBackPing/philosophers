@@ -12,6 +12,16 @@
 
 #include "../includes/philosophers.h"
 
+void	writer_error(char *message)
+{
+	unsigned int	len;
+
+	len = 0;
+	while (message[len] != '\0')
+		len++;
+	write(STDERR , message, len);
+}
+
 int	main(int ac, char **av)
 {
 	t_pars	pars;
