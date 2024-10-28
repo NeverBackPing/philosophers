@@ -59,3 +59,13 @@ void	think(t_philo *philo, t_data *data)
 	if (data->pars->nb_philo % 2 == 1)
 		ft_usleep(data->pars->time_think);
 }
+
+void	eating(t_data *data, t_philo *philo)
+{
+	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
+	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
+	printf("%u %d is eating 🍜\n", get_ms(data), philo->id + 1);
+	ft_usleep(data->pars->time_eat);
+	philo->nb_meal++;
+	philo->last_meal = get_ms(data);
+}
