@@ -31,13 +31,17 @@ void	*routine(void *args)
 
 	philo = (t_philo *)args;
 	data = philo->data;
-	start_time(data, philo->pars);
+	data->dead = false;
 	while (true)
 	{
 		//Think
+		if (data->dead)
+			break ;
 		think(philo, data);
 
 		//Eat
+		if (data->dead)
+			break ;
 		pthread_mutex_lock(&data->write);
 		pthread_mutex_lock(&data->philo[philo->id + 1].fork);
 		pthread_mutex_lock(&data->philo[philo->id].fork);
@@ -47,8 +51,15 @@ void	*routine(void *args)
 		pthread_mutex_unlock(&data->write);
 
 		//Sleep
+		if (data->dead)
+			break ;
 		pthread_mutex_lock(&data->write);
 		ft_usleep(data->pars->time_sleep);
+		if (data->dead)
+		{
+			pthread_mutex_unlock(&data->write);
+			break ;
+		}
 		printf("%u %d is sleeping 😴\n", get_ms(data), philo->id + 1);
 		pthread_mutex_unlock(&data->write);
 	}

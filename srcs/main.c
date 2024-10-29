@@ -35,6 +35,7 @@ int	main(int ac, char **av)
 		return (writer_error(DATA_ERR), FAIL);
 	if (pthread_mutex_init(&data.write, NULL))
 		return (writer_error(MUTEX_ERR), FAIL);
+	start_time(&data, &pars);
 	while (i < pars.nb_philo)
 	{
 		if (!init_philo(&data.philo[i], i, &data, &pars))
@@ -46,7 +47,8 @@ int	main(int ac, char **av)
 			return (writer_error(ERR_THREAD), FAIL);
 		i++;
 	}
+	if (monitor_threads(&data))
+		return (SUCCESS);
 	destroy_mutex(&data);
-	monitor_threads(&data);
 	return (printf("%s\n", EATS), SUCCESS);
 }

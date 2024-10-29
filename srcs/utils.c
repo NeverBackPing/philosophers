@@ -45,10 +45,8 @@ int	ft_usleep(unsigned int milliseconds)
 
 void	start_time(t_data *data, t_pars *pars)
 {
-	pthread_mutex_lock(&data->write);
 	if (pars->start_time == 0)
 		pars->start_time = get_current_time();
-	pthread_mutex_unlock(&data->write);
 }
 
 void	think(t_philo *philo, t_data *data)
@@ -62,10 +60,12 @@ void	think(t_philo *philo, t_data *data)
 
 void	eating(t_data *data, t_philo *philo)
 {
+	if (data->dead)
+			return ;
 	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
 	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
 	printf("%u %d is eating 🍜\n", get_ms(data), philo->id + 1);
 	ft_usleep(data->pars->time_eat);
-	philo->nb_meal++;
-	philo->last_meal = get_ms(data);
+	philo[philo->id].nb_meal++;
+	philo[philo->id].last_meal = get_ms(data);
 }

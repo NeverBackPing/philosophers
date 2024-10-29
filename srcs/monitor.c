@@ -39,13 +39,33 @@ void	join_thread(t_data *data)
 
 void	*monitor(void *args)
 {
-	t_data	*data;
+	t_data			*data;
+	t_pars			*pars;
+	uint8_t			i;
+	unsigned long	check;
 
+	i = 0;
 	data = (t_data *)args;
+	pars = data->pars;
+	data->dead = false;
 	while (true)
 	{
+		while (i < pars->nb_philo)
+		{
+			check =  get_ms(data) - data->philo[i].last_meal;
+			if (check > pars->time_die)
+			{
+				data->dead = true;
+				printf("%u %d die 💀\n", get_ms(data), data->philo[i].id + 1);
+				break ;
+			}
+			i++;
+		}
+		if (data->dead)
+			break ;
+		check = 0;
+		i = 0;
 	}
-		printf("manage : %d\n", data->dead);
 	return (SUCCESS);
 }
 
