@@ -12,6 +12,12 @@
 
 #include "../includes/philosophers.h"
 
+void	start_time(t_pars *pars)
+{
+	if (pars->start_time == 0)
+		pars->start_time = get_current_time();
+}
+
 void	writer_error(char *message)
 {
 	unsigned int	len;
@@ -29,13 +35,13 @@ int	main(int ac, char **av)
 	uint8_t	i;
 
 	i = 0;
-	if (ac != 6 && ac != 7)
+	if (ac != 5 && ac != 6)
 		return (writer_error(E), FAIL);
 	if (!parsing_init(av, &pars, &data))
 		return (writer_error(DATA_ERR), FAIL);
 	if (pthread_mutex_init(&data.write, NULL))
 		return (writer_error(MUTEX_ERR), FAIL);
-	start_time(&data, &pars);
+	start_time(&pars);
 	while (i < pars.nb_philo)
 	{
 		if (!init_philo(&data.philo[i], i, &data, &pars))

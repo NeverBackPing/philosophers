@@ -42,30 +42,29 @@ int	ft_usleep(unsigned int milliseconds)
 	return (0);
 }
 
-
-void	start_time(t_data *data, t_pars *pars)
-{
-	if (pars->start_time == 0)
-		pars->start_time = get_current_time();
-}
-
 void	think(t_philo *philo, t_data *data)
 {
 	pthread_mutex_lock(&data->write);
+	if (data->dead)
+	{
+		pthread_mutex_unlock(&data->write);
+		return ;
+	}
 	printf("%u %d is thinking 🏛️\n", get_ms(data), philo->id + 1);
 	pthread_mutex_unlock(&data->write);
 	if (data->pars->nb_philo % 2 == 1)
 		ft_usleep(data->pars->time_think);
 }
 
-void	eating(t_data *data, t_philo *philo)
+void	eating(t_data *data, t_philo *philo, uint8_t i)
 {
 	if (data->dead)
-			return ;
+		return ;
 	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
 	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
 	printf("%u %d is eating 🍜\n", get_ms(data), philo->id + 1);
+	data->philo[i].nb_meal++;
+	data->philo[i].last_meal = get_ms(data);
 	ft_usleep(data->pars->time_eat);
-	philo[philo->id].nb_meal++;
-	philo[philo->id].last_meal = get_ms(data);
+	//printf("last: %lu id : %d\n", data->philo[i].last_meal, i + 1);
 }

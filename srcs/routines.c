@@ -42,13 +42,25 @@ void	*routine(void *args)
 		//Eat
 		if (data->dead)
 			break ;
-		pthread_mutex_lock(&data->write);
-		pthread_mutex_lock(&data->philo[philo->id + 1].fork);
+		if (data->pars->nb_philo % 2 == 0)
+			pthread_mutex_lock(&data->philo[philo->id + 1].fork);
+		else
+			pthread_mutex_lock(&data->philo[philo->id - 1].fork);
 		pthread_mutex_lock(&data->philo[philo->id].fork);
-		eating(data, philo);
+		//pthread_mutex_lock(&data->philo[philo->id + 1].fork);
+		if (data->dead)
+		{
+			pthread_mutex_unlock(&data->philo[philo->id].fork);
+			pthread_mutex_unlock(&data->philo[philo->id + 1].fork);
+			break ;
+		}
+		eating(data, data->philo, philo->id);
+		//pthread_mutex_unlock(&data->philo[philo->id + 1].fork);
+		if (data->pars->nb_philo % 2 == 0)
+			pthread_mutex_unlock(&data->philo[philo->id + 1].fork);
+		else
+			pthread_mutex_unlock(&data->philo[philo->id - 1].fork);
 		pthread_mutex_unlock(&data->philo[philo->id].fork);
-		pthread_mutex_unlock(&data->philo[philo->id + 1].fork);
-		pthread_mutex_unlock(&data->write);
 
 		//Sleep
 		if (data->dead)
