@@ -88,7 +88,7 @@ bool			parsing_init(char **argv, t_pars *pars, t_data *data);
 bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
 void			*routine(void *data);
 //Utils
-void			eating(t_data *data, t_philo *philo, uint8_t i);
+void			eating(t_data *data, t_philo *philo);
 int				ft_usleep(unsigned int milliseconds);
 unsigned int	get_ms(t_data *data);
 unsigned int	get_current_time ( void );

@@ -105,8 +105,7 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 		pars->nb_eat = ft_atol_usigned(argv[5]);
 	if (pars->nb_philo <= 0 || pars->nb_philo > 200)
 		return (false);
-	if (pars->time_die <= 0 || pars->time_eat <= 0 || pars->time_sleep <= 0
-	|| pars->time_think <= 0)
+	if (pars->time_die <= 0 || pars->time_eat <= 0 || pars->time_sleep <= 0)
 		return (false);
 	pars->start_time = 0;
 	data->dead = false;

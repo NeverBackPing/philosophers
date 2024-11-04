@@ -52,13 +52,7 @@ void	*monitor(void *args)
 	{
 		while (i < pars->nb_philo)
 		{
-			/*printf("\n");
-			printf("Philosopher %d:\n", data->philo[i].id);
-			printf("Last meal time: %lu\n", data->philo[i].last_meal);
-			printf("Number of meals: %lu\n", data->philo[i].nb_meal);
-			printf("\n");*/
 			check =  get_ms(data) - data->philo[i].last_meal;
-			//printf("check : %lu | ms : %u | las meal : %ld | ID : %d\n", check, get_ms(data), data->philo[i].last_meal, i + 1);
 			if (check > pars->time_die)
 			{
 				data->dead = true;

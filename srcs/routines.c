@@ -32,48 +32,52 @@ void	*routine(void *args)
 	philo = (t_philo *)args;
 	data = philo->data;
 	data->dead = false;
-	while (true)
+	while (1)
 	{
-		//Think
-		if (data->dead)
-			break ;
 		think(philo, data);
 
-		//Eat
-		if (data->dead)
-			break ;
-		if (data->pars->nb_philo % 2 == 0)
-			pthread_mutex_lock(&data->philo[philo->id + 1].fork);
-		else
-			pthread_mutex_lock(&data->philo[philo->id - 1].fork);
-		pthread_mutex_lock(&data->philo[philo->id].fork);
-		//pthread_mutex_lock(&data->philo[philo->id + 1].fork);
-		if (data->dead)
-		{
-			pthread_mutex_unlock(&data->philo[philo->id].fork);
-			pthread_mutex_unlock(&data->philo[philo->id + 1].fork);
-			break ;
-		}
-		eating(data, data->philo, philo->id);
-		//pthread_mutex_unlock(&data->philo[philo->id + 1].fork);
-		if (data->pars->nb_philo % 2 == 0)
-			pthread_mutex_unlock(&data->philo[philo->id + 1].fork);
-		else
-			pthread_mutex_unlock(&data->philo[philo->id - 1].fork);
-		pthread_mutex_unlock(&data->philo[philo->id].fork);
-
-		//Sleep
-		if (data->dead)
-			break ;
 		pthread_mutex_lock(&data->write);
-		ft_usleep(data->pars->time_sleep);
 		if (data->dead)
 		{
 			pthread_mutex_unlock(&data->write);
 			break ;
 		}
-		printf("%u %d is sleeping 😴\n", get_ms(data), philo->id + 1);
 		pthread_mutex_unlock(&data->write);
+
+		if ((philo->id + 1) % 2 == 0)
+		{
+			pthread_mutex_lock(&philo->data->philo[philo->id].fork);
+			pthread_mutex_lock(&philo->data->philo[philo->id + 1].fork);
+		}
+		else
+		{
+			pthread_mutex_lock(&philo->data->philo[philo->id - 1].fork);
+			pthread_mutex_lock(&philo->data->philo[philo->id].fork);
+		}
+
+		pthread_mutex_lock(&data->write);
+		if (data->dead)
+		{
+			pthread_mutex_unlock(&data->write);
+			pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
+			pthread_mutex_unlock(&philo->data->philo[(philo->id + 1) % data->pars->nb_philo].fork);
+			break ;
+		}
+		pthread_mutex_unlock(&data->write);
+
+		eating(data, philo);
+
+		pthread_mutex_lock(&data->write);
+		if (data->dead)
+		{
+			pthread_mutex_unlock(&data->write);
+			break ;
+		}
+		printf("%u %d is sleeping 😴\n", get_ms(philo->data), philo->id + 1);
+		pthread_mutex_unlock(&data->write);
+		ft_usleep(data->pars->time_sleep);
+
 	}
+
 	return (SUCCESS);
 }

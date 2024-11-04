@@ -47,24 +47,31 @@ void	think(t_philo *philo, t_data *data)
 	pthread_mutex_lock(&data->write);
 	if (data->dead)
 	{
-		pthread_mutex_unlock(&data->write);
+		pthread_mutex_unlock(&philo->data->write);
 		return ;
 	}
-	printf("%u %d is thinking 🏛️\n", get_ms(data), philo->id + 1);
+	printf("%u %d is thinking 🏛️\n", get_ms(data), philo->data->philo[philo->id].id + 1);
 	pthread_mutex_unlock(&data->write);
-	if (data->pars->nb_philo % 2 == 1)
+	if (!(data->pars->nb_philo % 2 == 0))
 		ft_usleep(data->pars->time_think);
 }
 
-void	eating(t_data *data, t_philo *philo, uint8_t i)
+void	eating(t_data *data, t_philo *philo)
 {
-	if (data->dead)
-		return ;
-	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
-	printf("%u %d has taken a fork 🍴\n", get_ms(data), philo->id + 1);
-	printf("%u %d is eating 🍜\n", get_ms(data), philo->id + 1);
-	data->philo[i].nb_meal++;
-	data->philo[i].last_meal = get_ms(data);
+	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
+	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
+	printf("%u %d is eating 🍜\n", get_ms(philo->data), philo->id + 1);
+	philo->last_meal = get_ms(philo->data);
+	philo->nb_meal++;
+	if ((philo->id + 1) % 2 == 0)
+	{
+		pthread_mutex_unlock(&philo->data->philo[philo->id + 1].fork);
+		pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
+	}
+	else
+	{
+		pthread_mutex_unlock(&philo->data->philo[philo->id - 1].fork);
+		pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
+	}
 	ft_usleep(data->pars->time_eat);
-	//printf("last: %lu id : %d\n", data->philo[i].last_meal, i + 1);
 }
