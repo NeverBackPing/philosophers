@@ -45,7 +45,7 @@ int	ft_usleep(unsigned int milliseconds)
 void	think(t_philo *philo, t_data *data)
 {
 	pthread_mutex_lock(&data->write);
-	if (data->dead)
+	if ((data->dead) || (data->meal))
 	{
 		pthread_mutex_unlock(&philo->data->write);
 		return ;
@@ -62,7 +62,8 @@ void	eating(t_data *data, t_philo *philo)
 	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
 	printf("%u %d is eating 🍜\n", get_ms(philo->data), philo->id + 1);
 	philo->last_meal = get_ms(philo->data);
-	philo->nb_meal++;
+	if (data->pars->nb_eat != philo->nb_meal)
+		philo->nb_meal++;
 	if ((philo->id + 1) % 2 == 0)
 	{
 		pthread_mutex_unlock(&philo->data->philo[philo->id + 1].fork);

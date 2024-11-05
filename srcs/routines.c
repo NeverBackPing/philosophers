@@ -32,12 +32,13 @@ void	*routine(void *args)
 	philo = (t_philo *)args;
 	data = philo->data;
 	data->dead = false;
-	while (1)
+	data->meal = false;
+	while (!(data->dead) || !(data->meal))
 	{
 		think(philo, data);
 
 		pthread_mutex_lock(&data->write);
-		if (data->dead)
+		if ((data->dead) || (data->meal))
 		{
 			pthread_mutex_unlock(&data->write);
 			break ;
@@ -56,11 +57,9 @@ void	*routine(void *args)
 		}
 
 		pthread_mutex_lock(&data->write);
-		if (data->dead)
+		if ((data->dead) || (data->meal))
 		{
 			pthread_mutex_unlock(&data->write);
-			pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
-			pthread_mutex_unlock(&philo->data->philo[(philo->id + 1) % data->pars->nb_philo].fork);
 			break ;
 		}
 		pthread_mutex_unlock(&data->write);
@@ -68,7 +67,7 @@ void	*routine(void *args)
 		eating(data, philo);
 
 		pthread_mutex_lock(&data->write);
-		if (data->dead)
+		if ((data->dead) || (data->meal))
 		{
 			pthread_mutex_unlock(&data->write);
 			break ;
@@ -76,7 +75,6 @@ void	*routine(void *args)
 		printf("%u %d is sleeping 😴\n", get_ms(philo->data), philo->id + 1);
 		pthread_mutex_unlock(&data->write);
 		ft_usleep(data->pars->time_sleep);
-
 	}
 
 	return (SUCCESS);

@@ -42,32 +42,45 @@ void	*monitor(void *args)
 	t_data			*data;
 	t_pars			*pars;
 	uint8_t			i;
-	unsigned long	check;
+	unsigned long	die_check;
+	unsigned long	meal_check;
 
 	i = 0;
+	meal_check = 0;
 	data = (t_data *)args;
 	pars = data->pars;
 	data->dead = false;
-	while (true)
+	data->meal = false;
+	while (1)
 	{
 		while (i < pars->nb_philo)
 		{
-			check =  get_ms(data) - data->philo[i].last_meal;
-			if (check > pars->time_die)
+			die_check =  get_ms(data) - data->philo[i].last_meal;
+			if (die_check > pars->time_die)
 			{
 				data->dead = true;
 				printf("%u %d die 💀\n", get_ms(data), data->philo[i].id + 1);
 				break ;
 			}
+			//printf("Meal: %ld ID: %d\n",data->philo[i].nb_meal, i + 1);
+			if (data->philo[i].nb_meal == data->pars->nb_eat)
+				meal_check++;
+			if (meal_check == data->pars->nb_philo)
+			{
+				data->meal = true;
+				break ;
+			}
 			i++;
-			check = 0;
+			die_check = 0;
 		}
-		if (data->dead)
+		meal_check = 0;
+		if (data->dead || data->meal)
 			break ;
 		i = 0;
 	}
 	return (SUCCESS);
 }
+
 
 int	monitor_threads(t_data *data)
 {

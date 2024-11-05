@@ -56,5 +56,7 @@ int	main(int ac, char **av)
 	if (monitor_threads(&data))
 		return (SUCCESS);
 	destroy_mutex(&data);
+	if ((data.dead) && !(data.meal))
+		return (FAIL);
 	return (printf("%s\n", EATS), SUCCESS);
 }

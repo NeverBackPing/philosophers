@@ -69,6 +69,7 @@ typedef struct		s_data
 	//monitor philo
 	pthread_t		monitor;
 	bool			dead;
+	bool			meal;
 	//struct philo
 	t_philo			philo[200];
 	//data intput
