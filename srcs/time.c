@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routines.c                                         :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjossain <sjossain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,38 +12,32 @@
 
 #include "../includes/philosophers.h"
 
-bool	init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars)
+unsigned int	get_current_time (void)
 {
-	philo->id = id;
-	philo->last_meal = 0;
-	philo->nb_meal = 0;
-	if (pthread_mutex_init(&philo->fork, NULL))
-		return (writer_error(MUTEX_ERR), false);
-	philo->data = data;
-	philo->pars = pars;
-	return (true);
+	struct	timeval	time ;
+
+	if (gettimeofday(&time, NULL ) == -1 )
+		write(2 , "\033[31mError:\033[0m gettimeofday()\n" , 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	*routine(void *args)
-{
-	t_philo	*philo;
-	t_data	*data;
 
-	philo = (t_philo *)args;
-	data = philo->data;
-	data->dead = false;
-	data->meal = false;
-	while (!(data->dead) || !(data->meal))
-	{
-		think(philo, data);
-		if ((data->dead) || (data->meal))
-			break ;
-		//lock_fork_mutex(philo, data->pars);
-		/*if ((data->dead))
-			break ;*/
-		if (eating(data, philo))
-			break ;
-		sleeps(philo, data);
-	}
-	return (SUCCESS);
+unsigned int	get_ms(t_data *data)
+{
+	struct timeval	time;
+	unsigned int	current_time;
+	gettimeofday(&time, NULL);
+
+	current_time = (time.tv_sec * 1000 + time.tv_usec / 1000);
+	return (current_time - data->pars->start_time);
+}
+
+int	ft_usleep(unsigned int milliseconds)
+{
+	unsigned int	start;
+
+	start = get_current_time();
+	while ((get_current_time() - start) < milliseconds)
+		usleep(500);
+	return (0);
 }

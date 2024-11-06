@@ -12,67 +12,54 @@
 
 #include "../includes/philosophers.h"
 
-unsigned int	get_current_time (void)
+
+void	sleeps(t_philo *philo, t_data *data)
 {
-	struct	timeval	time ;
-
-	if (gettimeofday(&time, NULL ) == -1 )
-		write(2 , "\033[31mError:\033[0m gettimeofday()\n" , 22);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-
-unsigned int	get_ms(t_data *data)
-{
-	struct timeval	time;
-	unsigned int	current_time;
-	gettimeofday(&time, NULL);
-
-	current_time = (time.tv_sec * 1000 + time.tv_usec / 1000);
-	return (current_time - data->pars->start_time);
-}
-
-int	ft_usleep(unsigned int milliseconds)
-{
-	unsigned int	start;
-
-	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-		usleep(500);
-	return (0);
+	pthread_mutex_lock(&data->write);
+	if ((data->dead) || (data->meal))
+	{
+		pthread_mutex_unlock(&data->write);
+		return ;
+	}
+	printf("%u %d is sleeping 😴\n", get_ms(philo->data), philo->id + 1);
+	pthread_mutex_unlock(&data->write);
+	ft_usleep(data->pars->time_sleep);
 }
 
 void	think(t_philo *philo, t_data *data)
 {
+	uint8_t	id;
+
 	pthread_mutex_lock(&data->write);
 	if ((data->dead) || (data->meal))
 	{
 		pthread_mutex_unlock(&philo->data->write);
 		return ;
 	}
-	printf("%u %d is thinking 🏛️\n", get_ms(data), philo->data->philo[philo->id].id + 1);
+	id = philo->data->philo[philo->id].id + 1;
+	printf("%u %d is thinking 🏛️\n", get_ms(data), id);
 	pthread_mutex_unlock(&data->write);
 	if (!(data->pars->nb_philo % 2 == 0))
 		ft_usleep(data->pars->time_think);
 }
 
-void	eating(t_data *data, t_philo *philo)
+bool	eating(t_data *data, t_philo *philo)
 {
+	lock_fork_mutex(philo, data->pars);
+	if (data->dead)
+	{
+		unlock_fork_mutex(philo, data->pars);
+		return (true);
+	}
 	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
 	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
 	printf("%u %d is eating 🍜\n", get_ms(philo->data), philo->id + 1);
-	philo->last_meal = get_ms(philo->data);
-	if (data->pars->nb_eat != philo->nb_meal)
-		philo->nb_meal++;
-	if ((philo->id + 1) % 2 == 0)
-	{
-		pthread_mutex_unlock(&philo->data->philo[philo->id + 1].fork);
-		pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
-	}
-	else
-	{
-		pthread_mutex_unlock(&philo->data->philo[philo->id - 1].fork);
-		pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
-	}
+	unlock_fork_mutex(philo, data->pars);
+	pthread_mutex_lock(&data->meal_mutex);
+	philo->data->philo[philo->id].last_meal= get_ms(philo->data);
+	if (philo->data->pars->nb_eat != philo->data->philo[philo->id].nb_meal)
+		philo->data->philo[philo->id].nb_meal++;
+	pthread_mutex_unlock(&data->meal_mutex);
 	ft_usleep(data->pars->time_eat);
+	return (false);
 }

@@ -13,7 +13,8 @@ NAME = philo
 
 ######################## 📁 #############################
 
-SRC = srcs/main.c srcs/parsing.c srcs/routines.c srcs/monitor.c srcs/utils.c
+SRC = srcs/main.c srcs/parsing.c srcs/routines.c srcs/monitor.c srcs/utils.c\
+	srcs/mutex.c srcs/time.c
 
 SRCS = ${SRC}
 

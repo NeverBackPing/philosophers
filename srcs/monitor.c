@@ -19,10 +19,10 @@ void	destroy_mutex(t_data *data)
 	i = 0;
 	while (i < data->pars->nb_philo)
 	{
-		pthread_mutex_destroy(&data->philo[i].fork);
+			pthread_mutex_destroy(&data->philo[i].fork);
 		i++;
 	}
-	pthread_mutex_destroy(&data->write);
+	destroy_mutex_monitor(data);
 }
 
 void	join_thread(t_data *data)
@@ -37,55 +37,58 @@ void	join_thread(t_data *data)
 	}
 }
 
-void	*monitor(void *args)
+bool	monitor_threads(t_data *data, t_pars *pars)
 {
-	t_data			*data;
-	t_pars			*pars;
-	uint8_t			i;
-	unsigned long	die_check;
+	//unsigned long	die_check;
 	unsigned long	meal_check;
+	uint8_t			i;
 
 	i = 0;
 	meal_check = 0;
+	while (i < pars->nb_philo)
+	{
+		//die_check =  get_ms(data) - data->philo[i].last_meal;
+		if (get_ms(data) - data->philo[i].last_meal > pars->time_die)
+		{
+			data->dead = true;
+			printf("%u %d die 💀\n", get_ms(data), data->philo[i].id + 1);
+			return (data->dead);
+		}
+		if (data->philo[i].nb_meal == data->pars->nb_eat)
+			meal_check++;
+		if (meal_check == data->pars->nb_philo)
+		{
+			data->meal = true;
+			return (data->meal);
+		}
+		i++;
+	}
+	return (false);
+}
+
+void	*monitor_routine(void *args)
+{
+	t_data	*data;
+	t_pars	*pars;
+
 	data = (t_data *)args;
 	pars = data->pars;
 	data->dead = false;
 	data->meal = false;
-	while (1)
+	while (!(data->dead) || !(data->meal))
 	{
-		while (i < pars->nb_philo)
-		{
-			die_check =  get_ms(data) - data->philo[i].last_meal;
-			if (die_check > pars->time_die)
-			{
-				data->dead = true;
-				printf("%u %d die 💀\n", get_ms(data), data->philo[i].id + 1);
-				break ;
-			}
-			//printf("Meal: %ld ID: %d\n",data->philo[i].nb_meal, i + 1);
-			if (data->philo[i].nb_meal == data->pars->nb_eat)
-				meal_check++;
-			if (meal_check == data->pars->nb_philo)
-			{
-				data->meal = true;
-				break ;
-			}
-			i++;
-			die_check = 0;
-		}
-		meal_check = 0;
-		if (data->dead || data->meal)
+
+		if (monitor_threads(data, pars))
 			break ;
-		i = 0;
 	}
 	return (SUCCESS);
 }
 
 
-int	monitor_threads(t_data *data)
+int	monitor(t_data *data)
 {
 	data->dead = true;
-	if (pthread_create(&data->monitor, NULL, monitor, data))
+	if (pthread_create(&data->monitor, NULL, monitor_routine, data))
 		return (writer_error(ERR_THREAD), SUCCESS);
 	join_thread(data);
 	if (pthread_join(data->monitor, NULL))

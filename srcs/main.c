@@ -39,8 +39,8 @@ int	main(int ac, char **av)
 		return (writer_error(E), FAIL);
 	if (!parsing_init(av, &pars, &data))
 		return (writer_error(DATA_ERR), FAIL);
-	if (pthread_mutex_init(&data.write, NULL))
-		return (writer_error(MUTEX_ERR), FAIL);
+	if (!(init_mutex_monitor(&data)))
+		return (FAIL);
 	start_time(&pars);
 	while (i < pars.nb_philo)
 	{
@@ -53,7 +53,7 @@ int	main(int ac, char **av)
 			return (writer_error(ERR_THREAD), FAIL);
 		i++;
 	}
-	if (monitor_threads(&data))
+	if (monitor(&data))
 		return (SUCCESS);
 	destroy_mutex(&data);
 	if ((data.dead) && !(data.meal))
