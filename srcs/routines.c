@@ -38,9 +38,6 @@ void	*routine(void *args)
 		think(philo, data);
 		if ((data->dead) || (data->meal))
 			break ;
-		//lock_fork_mutex(philo, data->pars);
-		/*if ((data->dead))
-			break ;*/
 		if (eating(data, philo))
 			break ;
 		sleeps(philo, data);
