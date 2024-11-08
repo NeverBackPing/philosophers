@@ -35,14 +35,12 @@ void	lock_fork_mutex(t_philo *philo, t_pars *pars)
 	if ((philo->id + 1) % 2 == 0)
 	{
 		neighbor_pair = (philo->id + 1) % (pars->nb_philo);
-		printf("\033[31mpair: fork\033[0m %d\n", neighbor_pair + 1);
-		pthread_mutex_lock(&philo->data->philo[philo->id].fork);
 		pthread_mutex_lock(&philo->data->philo[neighbor_pair].fork);
+		pthread_mutex_lock(&philo->data->philo[philo->id].fork);
 	}
 	else
 	{
 		neighbor_odd = (philo->id + 1) % (pars->nb_philo);
-		printf("\033[31modd: fork\033[0m %d\n", neighbor_odd + 1);
 		pthread_mutex_lock(&philo->data->philo[philo->id].fork);
 		pthread_mutex_lock(&philo->data->philo[neighbor_odd].fork);
 	}
@@ -56,14 +54,12 @@ void	unlock_fork_mutex(t_philo *philo, t_pars *pars)
 	if ((philo->id + 1) % 2 == 0)
 	{
 		neighbor_pair_unlock = (philo->id + 1) % (pars->nb_philo);
-		printf("\033[31mpair: unlock fork\033[0m %d\n", neighbor_pair_unlock + 1);
-		pthread_mutex_unlock(&philo->data->philo[neighbor_pair_unlock].fork);
 		pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
+		pthread_mutex_unlock(&philo->data->philo[neighbor_pair_unlock].fork);
 	}
 	else
 	{
 		neighbor_odd_unlock = (philo->id + 1) % (pars->nb_philo);
-		printf("\033[31modd: unlock fork\033[0m %d\n", neighbor_odd_unlock + 1);
 		pthread_mutex_unlock(&philo->data->philo[neighbor_odd_unlock].fork);
 		pthread_mutex_unlock(&philo->data->philo[philo->id].fork);
 	}

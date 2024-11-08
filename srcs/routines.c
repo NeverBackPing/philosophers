@@ -31,13 +31,18 @@ void	*routine(void *args)
 
 	philo = (t_philo *)args;
 	data = philo->data;
-	data->dead = false;
-	data->meal = false;
 	while (!(data->dead) || !(data->meal))
 	{
 		think(philo, data);
+
+		pthread_mutex_lock(&data->write);
 		if ((data->dead) || (data->meal))
+		{
+			pthread_mutex_unlock(&data->write);
 			break ;
+		}
+		pthread_mutex_unlock(&data->write);
+		
 		if (eating(data, philo))
 			break ;
 		sleeps(philo, data);

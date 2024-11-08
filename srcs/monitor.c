@@ -19,7 +19,7 @@ void	destroy_mutex(t_data *data)
 	i = 0;
 	while (i < data->pars->nb_philo)
 	{
-			pthread_mutex_destroy(&data->philo[i].fork);
+		pthread_mutex_destroy(&data->philo[i].fork);
 		i++;
 	}
 	destroy_mutex_monitor(data);
@@ -39,7 +39,6 @@ void	join_thread(t_data *data)
 
 bool	monitor_threads(t_data *data, t_pars *pars)
 {
-	//unsigned long	die_check;
 	unsigned long	meal_check;
 	uint8_t			i;
 
@@ -47,20 +46,23 @@ bool	monitor_threads(t_data *data, t_pars *pars)
 	meal_check = 0;
 	while (i < pars->nb_philo)
 	{
-		//die_check =  get_ms(data) - data->philo[i].last_meal;
+		pthread_mutex_lock(&data->write);
 		if (get_ms(data) - data->philo[i].last_meal > pars->time_die)
 		{
 			data->dead = true;
 			printf("%u %d die 💀\n", get_ms(data), data->philo[i].id + 1);
+			pthread_mutex_unlock(&data->write);
 			return (data->dead);
 		}
 		if (data->philo[i].nb_meal == data->pars->nb_eat)
 			meal_check++;
 		if (meal_check == data->pars->nb_philo)
 		{
-			data->meal = true;
+			data->dead = true;
+			pthread_mutex_unlock(&data->write);
 			return (data->meal);
 		}
+		pthread_mutex_unlock(&data->write);
 		i++;
 	}
 	return (false);
@@ -73,13 +75,15 @@ void	*monitor_routine(void *args)
 
 	data = (t_data *)args;
 	pars = data->pars;
-	data->dead = false;
-	data->meal = false;
 	while (!(data->dead) || !(data->meal))
 	{
-
+		//pthread_mutex_lock(&data->write);
 		if (monitor_threads(data, pars))
+		{
+			//pthread_mutex_unlock(&data->write);
 			break ;
+		}
+		//pthread_mutex_unlock(&data->write);
 	}
 	return (SUCCESS);
 }
@@ -87,7 +91,6 @@ void	*monitor_routine(void *args)
 
 int	monitor(t_data *data)
 {
-	data->dead = true;
 	if (pthread_create(&data->monitor, NULL, monitor_routine, data))
 		return (writer_error(ERR_THREAD), SUCCESS);
 	join_thread(data);

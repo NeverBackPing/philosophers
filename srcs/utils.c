@@ -30,10 +30,11 @@ void	think(t_philo *philo, t_data *data)
 {
 	uint8_t	id;
 
+
 	pthread_mutex_lock(&data->write);
 	if ((data->dead) || (data->meal))
 	{
-		pthread_mutex_unlock(&philo->data->write);
+		pthread_mutex_unlock(&data->write);
 		return ;
 	}
 	id = philo->data->philo[philo->id].id + 1;
@@ -45,21 +46,25 @@ void	think(t_philo *philo, t_data *data)
 
 bool	eating(t_data *data, t_philo *philo)
 {
+	pthread_mutex_lock(&data->write);
 	lock_fork_mutex(philo, data->pars);
+	//pthread_mutex_lock(&data->write);
 	if (data->dead)
 	{
 		unlock_fork_mutex(philo, data->pars);
 		return (true);
 	}
+	//pthread_mutex_unlock(&data->write);
 	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
 	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
 	printf("%u %d is eating 🍜\n", get_ms(philo->data), philo->id + 1);
-	unlock_fork_mutex(philo, data->pars);
 	pthread_mutex_lock(&data->meal_mutex);
 	philo->data->philo[philo->id].last_meal= get_ms(philo->data);
 	if (philo->data->pars->nb_eat != philo->data->philo[philo->id].nb_meal)
 		philo->data->philo[philo->id].nb_meal++;
 	pthread_mutex_unlock(&data->meal_mutex);
+	unlock_fork_mutex(philo, data->pars);
+	pthread_mutex_unlock(&data->write);
 	ft_usleep(data->pars->time_eat);
 	return (false);
 }

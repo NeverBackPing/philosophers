@@ -109,6 +109,7 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 		return (false);
 	pars->start_time = 0;
 	data->dead = false;
+	data->meal = false;
 	data->pars = pars;
 	return (true);
 }

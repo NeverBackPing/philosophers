@@ -44,7 +44,7 @@ int	main(int ac, char **av)
 	start_time(&pars);
 	while (i < pars.nb_philo)
 	{
-		if (!init_philo(&data.philo[i], i, &data, &pars))
+		if (!(init_philo(&data.philo[i], i, &data, &pars)))
 		{
 			join_thread(&data);
 			return (pthread_mutex_destroy(&data.write), FAIL);
