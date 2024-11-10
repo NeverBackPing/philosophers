@@ -58,7 +58,7 @@ bool	monitor_threads(t_data *data, t_pars *pars)
 			meal_check++;
 		if (meal_check == data->pars->nb_philo)
 		{
-			data->dead = true;
+			data->meal = true;
 			pthread_mutex_unlock(&data->write);
 			return (data->meal);
 		}
