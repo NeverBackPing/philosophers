@@ -35,19 +35,19 @@ void	*routine(void *args)
 	{
 		if (think(philo, data))
 			break ;
+
 		pthread_mutex_lock(&data->update);
 		if ((data->dead) || (data->meal))
 		{
-
 			pthread_mutex_unlock(&data->update);
 
 			break ;
 		}
 		pthread_mutex_unlock(&data->update);
 
-
 		if (eating(data, philo))
 			break ;
+			
 		sleeps(philo, data);
 	}
 	return (SUCCESS);
