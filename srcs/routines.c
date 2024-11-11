@@ -33,16 +33,19 @@ void	*routine(void *args)
 	data = philo->data;
 	while (!(data->dead) || !(data->meal))
 	{
-		think(philo, data);
-
-		pthread_mutex_lock(&data->write);
+		if (think(philo, data))
+			break ;
+		pthread_mutex_lock(&data->update);
 		if ((data->dead) || (data->meal))
 		{
-			pthread_mutex_unlock(&data->write);
+
+			pthread_mutex_unlock(&data->update);
+
 			break ;
 		}
-		pthread_mutex_unlock(&data->write);
-		
+		pthread_mutex_unlock(&data->update);
+
+
 		if (eating(data, philo))
 			break ;
 		sleeps(philo, data);

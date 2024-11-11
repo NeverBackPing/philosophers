@@ -46,23 +46,25 @@ bool	monitor_threads(t_data *data, t_pars *pars)
 	meal_check = 0;
 	while (i < pars->nb_philo)
 	{
-		pthread_mutex_lock(&data->write);
+		pthread_mutex_lock(&data->update);
 		if (get_ms(data) - data->philo[i].last_meal > pars->time_die)
 		{
-			data->dead = true;
+			pthread_mutex_lock(&data->write);
+			data->philo[i].data->dead = true;
 			printf("%u %d die 💀\n", get_ms(data), data->philo[i].id + 1);
 			pthread_mutex_unlock(&data->write);
+			pthread_mutex_unlock(&data->update);
 			return (data->dead);
 		}
 		if (data->philo[i].nb_meal == data->pars->nb_eat)
 			meal_check++;
 		if (meal_check == data->pars->nb_philo)
 		{
-			data->meal = true;
-			pthread_mutex_unlock(&data->write);
+			data->philo[i].data->meal = true;
+			pthread_mutex_unlock(&data->update);
 			return (data->meal);
 		}
-		pthread_mutex_unlock(&data->write);
+		pthread_mutex_unlock(&data->update);
 		i++;
 	}
 	return (false);
@@ -77,13 +79,8 @@ void	*monitor_routine(void *args)
 	pars = data->pars;
 	while (!(data->dead) || !(data->meal))
 	{
-		//pthread_mutex_lock(&data->write);
 		if (monitor_threads(data, pars))
-		{
-			//pthread_mutex_unlock(&data->write);
 			break ;
-		}
-		//pthread_mutex_unlock(&data->write);
 	}
 	return (SUCCESS);
 }

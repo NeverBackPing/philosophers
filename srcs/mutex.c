@@ -16,7 +16,7 @@ bool	init_mutex_monitor(t_data *data)
 {
 	if (pthread_mutex_init(&data->write, NULL))
 		return (writer_error(MUTEX_ERR), false);
-	if (pthread_mutex_init(&data->meal_mutex, NULL))
+	if (pthread_mutex_init(&data->update, NULL))
 		return (writer_error(MUTEX_ERR), false);
 	return (true);
 }
@@ -24,7 +24,7 @@ bool	init_mutex_monitor(t_data *data)
 void	destroy_mutex_monitor(t_data *data)
 {
 	pthread_mutex_destroy(&data->write);
-	pthread_mutex_destroy(&data->meal_mutex);
+	pthread_mutex_destroy(&data->update);
 }
 
 void	lock_fork_mutex(t_philo *philo, t_pars *pars)

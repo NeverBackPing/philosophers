@@ -48,6 +48,7 @@ typedef struct		s_pars
 	unsigned long	time_sleep;
 	unsigned long	time_think;
 	unsigned long	nb_eat;
+	unsigned long	base;
 	unsigned int	start_time;
 }	t_pars;
 
@@ -76,7 +77,7 @@ typedef struct		s_data
 	t_pars			*pars;
 	//mange writing
 	pthread_mutex_t	write;
-	pthread_mutex_t	meal_mutex;
+	pthread_mutex_t	update;
 }	t_data;
 //Main
 void			writer_error(char *message);
@@ -102,5 +103,5 @@ unsigned int	get_current_time ( void );
 //Utils
 bool			eating(t_data *data, t_philo *philo);
 void			sleeps(t_philo *philo, t_data *data);
-void			think(t_philo *philo, t_data *data);
+bool			think(t_philo *philo, t_data *data);
 #endif
