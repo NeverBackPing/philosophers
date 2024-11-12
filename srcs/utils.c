@@ -33,8 +33,6 @@ bool	think(t_philo *philo, t_data *data)
 {
 	uint8_t	id;
 
-	if (data->pars->time_die < data->pars->base)
-		return (true);
 	pthread_mutex_lock(&data->update);
 	if ((data->dead) || (data->meal))
 	{
@@ -47,20 +45,15 @@ bool	think(t_philo *philo, t_data *data)
 	id = philo->data->philo[philo->id].id + 1;
 	printf("%u %d is thinking 🏛️\n", get_ms(data), id);
 	pthread_mutex_unlock(&data->write);
-
-	if (!(data->pars->nb_philo % 2 == 0))
-	{
-		if (data->pars->time_die < data->pars->base)
+	if (data->pars->time_die < data->pars->base)
 			return (true);
+	if (!(data->pars->nb_philo % 2 == 0))
 		ft_usleep(data->pars->time_think);
-	}
 	return (false);
 }
 
 bool	eating(t_data *data, t_philo *philo)
 {
-	if (data->pars->time_die < data->pars->base)
-		return (true);
 	pthread_mutex_lock(&data->update);
 	if (data->dead)
 	{

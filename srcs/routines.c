@@ -31,7 +31,7 @@ void	*routine(void *args)
 
 	philo = (t_philo *)args;
 	data = philo->data;
-	while (!(data->dead) || !(data->meal))
+	while (true)
 	{
 		if (think(philo, data))
 			break ;
@@ -40,14 +40,13 @@ void	*routine(void *args)
 		if ((data->dead) || (data->meal))
 		{
 			pthread_mutex_unlock(&data->update);
-
 			break ;
 		}
 		pthread_mutex_unlock(&data->update);
 
 		if (eating(data, philo))
 			break ;
-			
+
 		sleeps(philo, data);
 	}
 	return (SUCCESS);

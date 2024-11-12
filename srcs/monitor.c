@@ -79,12 +79,13 @@ void	*monitor_routine(void *args)
 
 	data = (t_data *)args;
 	pars = data->pars;
-	while (!(data->dead) || !(data->meal))
+	while (true)
 	{
 		if (monitor_threads(data, pars))
 		{
 			break ;
 		}
+		usleep(1000);
 	}
 	return (SUCCESS);
 }
