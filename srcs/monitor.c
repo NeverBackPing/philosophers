@@ -95,7 +95,7 @@ int	monitor(t_data *data)
 {
 	if (pthread_create(&data->monitor, NULL, monitor_routine, data))
 		return (writer_error(ERR_THREAD), SUCCESS);
-	join_thread(data);
+	//join_thread(data);
 	if (pthread_join(data->monitor, NULL))
 			return (SUCCESS);
 	return (SUCCESS);

@@ -55,6 +55,7 @@ int	main(int ac, char **av)
 	}
 	if (monitor(&data))
 		return (SUCCESS);
+	join_thread(&data);
 	destroy_mutex(&data);
 	if ((data.dead) && !(data.meal))
 		return (FAIL);

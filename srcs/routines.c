@@ -33,21 +33,23 @@ void	*routine(void *args)
 	data = philo->data;
 	while (true)
 	{
+		if (statut_thread(data))
+			break ;
+
 		if (think(philo, data))
 			break ;
 
-		pthread_mutex_lock(&data->update);
-		if ((data->dead) || (data->meal))
-		{
-			pthread_mutex_unlock(&data->update);
+		if (statut_thread(data))
 			break ;
-		}
-		pthread_mutex_unlock(&data->update);
 
 		if (eating(data, philo))
 			break ;
 
-		sleeps(philo, data);
+		if (statut_thread(data))
+			break ;
+
+		if (sleeps(philo, data))
+			break;
 	}
 	return (SUCCESS);
 }

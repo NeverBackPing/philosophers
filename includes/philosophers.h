@@ -71,7 +71,6 @@ typedef struct		s_data
 	pthread_t		monitor;
 	bool			dead;
 	bool			meal;
-	bool			change;
 	//struct philo
 	t_philo			philo[200];
 	//data intput
@@ -79,6 +78,8 @@ typedef struct		s_data
 	//mange writing
 	pthread_mutex_t	write;
 	pthread_mutex_t	update;
+	pthread_mutex_t	unlock;
+	pthread_mutex_t	lock;
 }	t_data;
 //Main
 void			writer_error(char *message);
@@ -89,9 +90,9 @@ int				monitor(t_data *data);
 bool			monitor_threads(t_data *data, t_pars *pars);
 //Mutex
 void			destroy_mutex_monitor(t_data *data);
-void			lock_fork_mutex(t_philo *philo, t_pars *pars);
+bool			lock_fork_mutex(t_philo *philo, t_pars *pars);
 bool			init_mutex_monitor(t_data *data);
-void			unlock_fork_mutex(t_philo *philo, t_pars *pars);
+bool			unlock_fork_mutex(t_philo *philo, t_pars *pars);
 //Parsing
 bool			parsing_init(char **argv, t_pars *pars, t_data *data);
 //Routines
@@ -103,6 +104,8 @@ unsigned int	get_ms(t_data *data);
 unsigned int	get_current_time ( void );
 //Utils
 bool			eating(t_data *data, t_philo *philo);
-void			sleeps(t_philo *philo, t_data *data);
+bool			sleeps(t_philo *philo, t_data *data);
+bool			statut_thread(t_data *data);
+bool			statut_thread_fork(t_philo *philo, t_data *data);
 bool			think(t_philo *philo, t_data *data);
 #endif
