@@ -12,22 +12,27 @@
 
 #include "../includes/philosophers.h"
 
-unsigned int	get_current_time (void)
+void	start_time(t_pars *pars)
 {
-	struct	timeval	time ;
+	if (pars->start_time == 0)
+		pars->start_time = get_current_time();
+}
 
-	if (gettimeofday(&time, NULL ) == -1 )
-		write(2 , "\033[31mError:\033[0m gettimeofday()\n" , 22);
+unsigned int	get_current_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL ) == -1)
+		write(2, "\033[31mError:\033[0m gettimeofday()\n", 22);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-
 unsigned int	get_ms(t_data *data)
 {
-	struct timeval	time;
 	unsigned int	current_time;
-	gettimeofday(&time, NULL);
+	struct timeval	time;
 
+	gettimeofday(&time, NULL);
 	current_time = (time.tv_sec * 1000 + time.tv_usec / 1000);
 	return (current_time - data->pars->start_time);
 }

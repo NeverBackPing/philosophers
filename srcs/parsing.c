@@ -48,7 +48,7 @@ unsigned long	ft_atol_usigned(const char *str)
 
 	i = 0;
 	number = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' ||
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
 			str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -72,7 +72,7 @@ uint8_t	ft_atoi_uint8(const char *str)
 
 	i = 0;
 	number = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' ||
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
 			str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -83,7 +83,7 @@ uint8_t	ft_atoi_uint8(const char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if (number > (UINT8_MAX / 10) ||
+		if (number > (UINT8_MAX / 10) || \
 			(number == (UINT8_MAX / 10) && (str[i] - '0') > (UINT8_MAX % 10)))
 			return (0);
 		number = number * 10 + (str[i] - '0');
@@ -99,10 +99,7 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 	pars->time_eat = ft_atol_usigned(argv[3]);
 	pars->time_sleep = ft_atol_usigned(argv[4]);
 	pars->base = pars->time_eat + pars->time_sleep;
-	//if ()
 	pars->time_think = pars->time_die - pars->time_eat - pars->time_sleep;
-	/*else
-		pars->time_think = pars->time_eat + pars->time_sleep;*/
 	if (argv[5] == NULL)
 		pars->nb_eat = -1;
 	else

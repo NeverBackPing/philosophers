@@ -12,29 +12,17 @@
 
 #include "../includes/philosophers.h"
 
-void	destroy_mutex(t_data *data)
+bool	meal_thread(t_data *data, unsigned long meal_check)
 {
-	uint8_t	i;
-
-	i = 0;
-	while (i < data->pars->nb_philo)
+	pthread_mutex_lock(&data->update);
+	if (meal_check == data->pars->nb_philo)
 	{
-		pthread_mutex_destroy(&data->philo[i].fork);
-		i++;
+		data->meal = true;
+		pthread_mutex_unlock(&data->update);
+		return (data->meal);
 	}
-	destroy_mutex_monitor(data);
-}
-
-void	join_thread(t_data *data)
-{
-	uint8_t	i;
-
-	i = 0;
-	while (i < data->pars->nb_philo)
-	{
-		pthread_join(data->philo[i].philo, NULL);
-		i++;
-	}
+	pthread_mutex_unlock(&data->update);
+	return (false);
 }
 
 bool	monitor_threads(t_data *data, t_pars *pars)
@@ -61,15 +49,7 @@ bool	monitor_threads(t_data *data, t_pars *pars)
 		pthread_mutex_unlock(&data->update);
 		i++;
 	}
-	pthread_mutex_lock(&data->update);
-	if (meal_check == data->pars->nb_philo)
-	{
-		data->meal = true;
-		pthread_mutex_unlock(&data->update);
-		return (data->meal);
-	}
-	pthread_mutex_unlock(&data->update);
-	return (false);
+	return (meal_thread(data, meal_check));
 }
 
 void	*monitor_routine(void *args)
@@ -90,13 +70,11 @@ void	*monitor_routine(void *args)
 	return (SUCCESS);
 }
 
-
 int	monitor(t_data *data)
 {
 	if (pthread_create(&data->monitor, NULL, monitor_routine, data))
 		return (writer_error(ERR_THREAD), SUCCESS);
-	//join_thread(data);
 	if (pthread_join(data->monitor, NULL))
-			return (SUCCESS);
+		return (SUCCESS);
 	return (SUCCESS);
 }

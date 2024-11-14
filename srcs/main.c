@@ -12,12 +12,6 @@
 
 #include "../includes/philosophers.h"
 
-void	start_time(t_pars *pars)
-{
-	if (pars->start_time == 0)
-		pars->start_time = get_current_time();
-}
-
 void	writer_error(char *message)
 {
 	unsigned int	len;
@@ -25,7 +19,19 @@ void	writer_error(char *message)
 	len = 0;
 	while (message[len] != '\0')
 		len++;
-	write(STDERR , message, len);
+	write(STDERR, message, len);
+}
+
+bool	init_program(t_data *data, t_pars *pars, char **av, int ac)
+{
+	if (ac != 5 && ac != 6)
+		return (writer_error(E), FAIL);
+	if (!parsing_init(av, pars, data))
+		return (writer_error(DATA_ERR), FAIL);
+	if (!(init_mutex_monitor(data)))
+		return (FAIL);
+	start_time(pars);
+	return (SUCCESS);
 }
 
 int	main(int ac, char **av)
@@ -34,14 +40,9 @@ int	main(int ac, char **av)
 	t_data	data;
 	uint8_t	i;
 
-	i = 0;
-	if (ac != 5 && ac != 6)
-		return (writer_error(E), FAIL);
-	if (!parsing_init(av, &pars, &data))
-		return (writer_error(DATA_ERR), FAIL);
-	if (!(init_mutex_monitor(&data)))
+	if (init_program(&data, &pars, av, ac))
 		return (FAIL);
-	start_time(&pars);
+	i = 0;
 	while (i < pars.nb_philo)
 	{
 		if (!(init_philo(&data.philo[i], i, &data, &pars)))

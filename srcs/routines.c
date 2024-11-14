@@ -35,21 +35,16 @@ void	*routine(void *args)
 	{
 		if (statut_thread(data))
 			break ;
-
 		if (think(philo, data))
 			break ;
-
 		if (statut_thread(data))
 			break ;
-
 		if (eating(data, philo))
 			break ;
-
 		if (statut_thread(data))
 			break ;
-
 		if (sleeps(philo, data))
-			break;
+			break ;
 	}
 	return (SUCCESS);
 }

@@ -36,10 +36,8 @@
 # define STDOUT 1
 # define ERR_THREAD "\033[31mError:\033[0m failed to create thread\n"
 
-typedef struct	s_data t_data;
-
-/*keep data inpout*/
-typedef struct		s_pars
+typedef struct s_data	t_data;
+typedef struct s_pars
 {
 	/*Datas in milliseconds 1 sec = 1000 sec*/
 	uint8_t			nb_philo;
@@ -53,7 +51,7 @@ typedef struct		s_pars
 }	t_pars;
 
 /*struct for philo*/
-typedef struct		s_philo
+typedef struct s_philo
 {
 	uint8_t			id;
 	unsigned long	last_meal;
@@ -65,7 +63,7 @@ typedef struct		s_philo
 }	t_philo;
 
 /*philo monitoring*/
-typedef struct		s_data
+typedef struct s_data
 {
 	//monitor philo
 	pthread_t		monitor;
@@ -82,30 +80,35 @@ typedef struct		s_data
 	pthread_mutex_t	lock;
 }	t_data;
 //Main
+bool			init_program(t_data *data, t_pars *pars, char **av, int ac);
 void			writer_error(char *message);
 //Monitor
-void			destroy_mutex(t_data *data);
-void			join_thread(t_data	*data);
+bool			meal_thread(t_data *data, unsigned long meal_check);
 int				monitor(t_data *data);
 bool			monitor_threads(t_data *data, t_pars *pars);
 //Mutex
 void			destroy_mutex_monitor(t_data *data);
 bool			lock_fork_mutex(t_philo *philo, t_pars *pars);
 bool			init_mutex_monitor(t_data *data);
-bool			unlock_fork_mutex(t_philo *philo, t_pars *pars);
+void			unlock_fork_mutex(t_philo *philo, t_pars *pars);
 //Parsing
 bool			parsing_init(char **argv, t_pars *pars, t_data *data);
 //Routines
-bool			init_philo(t_philo *philo, uint8_t id, t_data *data, t_pars *pars);
+bool			init_philo(t_philo *philo, uint8_t id, t_data *data,	\
+				t_pars *pars);
 void			*routine(void *data);
+//threads
+void			destroy_mutex(t_data *data);
+void			join_thread(t_data	*data);
+bool			statut_thread(t_data *data);
+bool			statut_thread_fork(t_philo *philo, t_data *data);
 //Time
 int				ft_usleep(unsigned int milliseconds);
 unsigned int	get_ms(t_data *data);
-unsigned int	get_current_time ( void );
+unsigned int	get_current_time(void);
+void			start_time(t_pars *pars);
 //Utils
 bool			eating(t_data *data, t_philo *philo);
 bool			sleeps(t_philo *philo, t_data *data);
-bool			statut_thread(t_data *data);
-bool			statut_thread_fork(t_philo *philo, t_data *data);
 bool			think(t_philo *philo, t_data *data);
 #endif
