@@ -92,7 +92,7 @@ uint8_t	ft_atoi_uint8(const char *str)
 	return (number);
 }
 
-bool	parsing_init(char **argv, t_pars *pars, t_data *data)
+bool	parsing_init(char **argv, t_pars *pars)
 {
 	pars->nb_philo = ft_atoi_uint8(argv[1]);
 	pars->time_die = ft_atol_usigned(argv[2]);
@@ -100,12 +100,14 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 	pars->time_sleep = ft_atol_usigned(argv[4]);
 	if (pars->time_eat > pars->time_sleep)
 	{
-		pars->time_think = (pars->time_eat * 30) / 100 - (pars->time_sleep* 30 ) / 100;
+		pars->time_think = (pars->time_eat * 30) / 100 - \
+		(pars->time_sleep * 30) / 100;
 		pars->base = pars->time_eat + pars->time_sleep + pars->time_think;
 	}
 	else
 	{
-		pars->time_think = (pars->time_sleep* 30 ) / 100 - (pars->time_eat* 30 ) / 100;
+		pars->time_think = (pars->time_sleep * 30) / 100 - \
+		(pars->time_eat * 30) / 100;
 		pars->base = pars->time_sleep + pars->time_eat + pars->time_think;
 	}
 	if (argv[5] == NULL)
@@ -116,7 +118,5 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 		return (false);
 	if (pars->time_die <= 0 || pars->time_eat <= 0 || pars->time_sleep <= 0)
 		return (false);
-	data->dead = false;
-	data->meal = false;
 	return (true);
 }

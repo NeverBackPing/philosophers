@@ -26,12 +26,14 @@ bool	init_program(t_data *data, t_pars *pars, char **av, int ac)
 {
 	if (ac != 5 && ac != 6)
 		return (writer_error(E), FAIL);
-	if (!parsing_init(av, pars, data))
+	if (!parsing_init(av, pars))
 		return (writer_error(DATA_ERR), FAIL);
 	if (!(init_mutex_monitor(data)))
 		return (FAIL);
 	pars->start_time = 0;
 	data->pars = pars;
+	data->dead = false;
+	data->meal = false;
 	start_time(pars);
 	return (SUCCESS);
 }

@@ -43,11 +43,7 @@ void	destroy_mutex(t_data *data)
 	i = 0;
 	while (i < data->pars->nb_philo)
 	{
-		if (pthread_mutex_destroy(&data->philo[i].fork))
-		{
-			printf("HELLO destroy\n");
-			printf("Thread: %p id: %d\n", &data->philo[i].philo, data->philo[i].id + 1);
-		}
+		pthread_mutex_destroy(&data->philo[i].fork);
 		i++;
 	}
 	destroy_mutex_monitor(data);

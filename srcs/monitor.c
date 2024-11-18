@@ -69,6 +69,7 @@ void	*monitor_routine(void *args)
 	}
 	return (NULL);
 }
+
 bool	monitor(t_data *data)
 {
 	if (pthread_create(&data->monitor, NULL, monitor_routine, data))

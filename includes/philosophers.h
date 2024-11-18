@@ -79,7 +79,7 @@ bool			init_program(t_data *data, t_pars *pars, char **av, int ac);
 void			writer_error(char *message);
 //Monitor
 bool			meal_thread(t_data *data, unsigned long meal_check);
-bool				monitor(t_data *data);
+bool			monitor(t_data *data);
 bool			monitor_threads(t_data *data, t_pars *pars);
 //Mutex
 void			destroy_mutex_monitor(t_data *data);
@@ -87,7 +87,7 @@ bool			lock_fork_mutex(t_philo *philo, t_pars *pars);
 bool			init_mutex_monitor(t_data *data);
 void			unlock_fork_mutex(t_philo *philo, t_pars *pars);
 //Parsing
-bool			parsing_init(char **argv, t_pars *pars, t_data *data);
+bool			parsing_init(char **argv, t_pars *pars);
 //Routines
 bool			init_philo(t_philo *philo, uint8_t id, t_data *data,	\
 				t_pars *pars);

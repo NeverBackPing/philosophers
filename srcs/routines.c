@@ -46,8 +46,5 @@ void	*routine(void *args)
 		if (sleeps(philo, data))
 			break ;
 	}
-	/* pthread_mutex_lock(&data->write);
-	printf("Thread: %p id: %d\n", &data->philo[philo->id].philo, data->philo[philo->id].id + 1);
-	pthread_mutex_unlock(&data->write); */
 	return (SUCCESS);
 }
