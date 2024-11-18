@@ -35,11 +35,11 @@ bool	monitor_threads(t_data *data, t_pars *pars)
 	while (i < pars->nb_philo)
 	{
 		pthread_mutex_lock(&data->update);
-		if (get_ms(data) - data->philo[i].last_meal > pars->time_die)
+		if (get_ms(data) - data->philo[i].last_meal >= pars->time_die)
 		{
 			data->dead = true;
 			pthread_mutex_lock(&data->write);
-			printf("%u %d die 💀\n", get_ms(data), data->philo[i].id + 1);
+			printf("%u %d die\n", get_ms(data), data->philo[i].id + 1);
 			pthread_mutex_unlock(&data->write);
 			pthread_mutex_unlock(&data->update);
 			return (data->dead);
@@ -67,14 +67,12 @@ void	*monitor_routine(void *args)
 		}
 		usleep(1000);
 	}
-	return (SUCCESS);
+	return (NULL);
 }
-
-int	monitor(t_data *data)
+bool	monitor(t_data *data)
 {
 	if (pthread_create(&data->monitor, NULL, monitor_routine, data))
-		return (writer_error(ERR_THREAD), SUCCESS);
-	if (pthread_join(data->monitor, NULL))
-		return (SUCCESS);
+		return (writer_error(ERR_THREAD), FAIL);
+	pthread_join(data->monitor, NULL);
 	return (SUCCESS);
 }

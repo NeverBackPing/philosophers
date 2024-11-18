@@ -39,7 +39,6 @@
 typedef struct s_data	t_data;
 typedef struct s_pars
 {
-	/*Datas in milliseconds 1 sec = 1000 sec*/
 	uint8_t			nb_philo;
 	unsigned long	time_die;
 	unsigned long	time_eat;
@@ -65,15 +64,11 @@ typedef struct s_philo
 /*philo monitoring*/
 typedef struct s_data
 {
-	//monitor philo
 	pthread_t		monitor;
 	bool			dead;
 	bool			meal;
-	//struct philo
 	t_philo			philo[200];
-	//data intput
 	t_pars			*pars;
-	//mange writing
 	pthread_mutex_t	write;
 	pthread_mutex_t	update;
 	pthread_mutex_t	unlock;
@@ -84,7 +79,7 @@ bool			init_program(t_data *data, t_pars *pars, char **av, int ac);
 void			writer_error(char *message);
 //Monitor
 bool			meal_thread(t_data *data, unsigned long meal_check);
-int				monitor(t_data *data);
+bool				monitor(t_data *data);
 bool			monitor_threads(t_data *data, t_pars *pars);
 //Mutex
 void			destroy_mutex_monitor(t_data *data);

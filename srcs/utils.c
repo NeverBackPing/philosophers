@@ -17,7 +17,7 @@ bool	sleeps(t_philo *philo, t_data *data)
 	if (statut_thread(data))
 		return (true);
 	pthread_mutex_lock(&data->write);
-	printf("%u %d is sleeping 😴\n", get_ms(philo->data), philo->id + 1);
+	printf("%u %d is sleeping\n", get_ms(philo->data), philo->id + 1);
 	pthread_mutex_unlock(&data->write);
 	if (data->pars->time_die < data->pars->time_sleep)
 		return (true);
@@ -41,7 +41,7 @@ bool	think(t_philo *philo, t_data *data)
 		return (true);
 	pthread_mutex_lock(&data->write);
 	id = philo->data->philo[philo->id].id + 1;
-	printf("%u %d is thinking 🏛️\n", get_ms(data), id);
+	printf("%u %d is thinking\n", get_ms(data), id);
 	pthread_mutex_unlock(&data->write);
 	return (false);
 }
@@ -53,9 +53,9 @@ bool	eating(t_data *data, t_philo *philo)
 	if (lock_fork_mutex(philo, data->pars))
 		return (true);
 	pthread_mutex_lock(&data->write);
-	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
-	printf("%u %d has taken a fork 🍴\n", get_ms(philo->data), philo->id + 1);
-	printf("%u %d is eating 🍜\n", get_ms(philo->data), philo->id + 1);
+	printf("%u %d has taken a fork\n", get_ms(philo->data), philo->id + 1);
+	printf("%u %d has taken a fork\n", get_ms(philo->data), philo->id + 1);
+	printf("%u %d is eating\n", get_ms(philo->data), philo->id + 1);
 	pthread_mutex_unlock(&data->write);
 	unlock_fork_mutex(philo, data->pars);
 	pthread_mutex_lock(&data->update);

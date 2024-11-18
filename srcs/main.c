@@ -48,14 +48,13 @@ int	main(int ac, char **av)
 		if (!(init_philo(&data.philo[i], i, &data, &pars)))
 		{
 			join_thread(&data);
-			return (pthread_mutex_destroy(&data.write), FAIL);
+			return (destroy_mutex_monitor(&data), FAIL);
 		}
 		if (pthread_create(&data.philo[i].philo, NULL, routine, &data.philo[i]))
 			return (writer_error(ERR_THREAD), FAIL);
 		i++;
 	}
-	if (monitor(&data))
-		return (SUCCESS);
+	monitor(&data);
 	join_thread(&data);
 	destroy_mutex(&data);
 	if ((data.dead) && !(data.meal))

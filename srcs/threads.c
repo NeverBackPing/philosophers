@@ -38,19 +38,6 @@ bool	statut_thread_fork(t_philo *philo, t_data *data)
 	return (false);
 }
 
-void	destroy_mutex(t_data *data)
-{
-	uint8_t	i;
-
-	i = 0;
-	while (i < data->pars->nb_philo)
-	{
-		pthread_mutex_destroy(&data->philo[i].fork);
-		i++;
-	}
-	destroy_mutex_monitor(data);
-}
-
 void	join_thread(t_data *data)
 {
 	uint8_t	i;
@@ -61,4 +48,21 @@ void	join_thread(t_data *data)
 		pthread_join(data->philo[i].philo, NULL);
 		i++;
 	}
+}
+
+void	destroy_mutex(t_data *data)
+{
+	uint8_t	i;
+
+	i = 0;
+	while (i < data->pars->nb_philo)
+	{
+		if (pthread_mutex_destroy(&data->philo[i].fork))
+		{
+			printf("HELLO destroy\n");
+			printf("Thread: %p id: %d\n", &data->philo[i].philo, data->philo[i].id + 1);
+		}
+		i++;
+	}
+	destroy_mutex_monitor(data);
 }

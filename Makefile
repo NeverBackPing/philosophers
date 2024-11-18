@@ -1,8 +1,8 @@
 ####################### 🛠️ ##############################
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g3 -o2
-
+CFLAGS = -Wall -Werror -Wextra -pthread -g3 -o2
+#-fsanitize=thread
 ####################### 🛠️ ##############################
 
 RM = rm -rf
