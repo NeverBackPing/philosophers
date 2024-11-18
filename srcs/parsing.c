@@ -98,8 +98,16 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 	pars->time_die = ft_atol_usigned(argv[2]);
 	pars->time_eat = ft_atol_usigned(argv[3]);
 	pars->time_sleep = ft_atol_usigned(argv[4]);
-	pars->base = pars->time_eat + pars->time_sleep;
-	pars->time_think = pars->time_die - pars->time_eat - pars->time_sleep;
+	if (pars->time_eat > pars->time_sleep)
+	{
+		pars->time_think = (pars->time_eat * 30) / 100 - (pars->time_sleep* 30 ) / 100;
+		pars->base = pars->time_eat + pars->time_sleep + pars->time_think;
+	}
+	else
+	{
+		pars->time_think = (pars->time_sleep* 30 ) / 100 - (pars->time_eat* 30 ) / 100;
+		pars->base = pars->time_sleep + pars->time_eat + pars->time_think;
+	}
 	if (argv[5] == NULL)
 		pars->nb_eat = -1;
 	else
@@ -108,9 +116,7 @@ bool	parsing_init(char **argv, t_pars *pars, t_data *data)
 		return (false);
 	if (pars->time_die <= 0 || pars->time_eat <= 0 || pars->time_sleep <= 0)
 		return (false);
-	pars->start_time = 0;
 	data->dead = false;
 	data->meal = false;
-	data->pars = pars;
 	return (true);
 }

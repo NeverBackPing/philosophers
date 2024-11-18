@@ -21,7 +21,7 @@ bool	sleeps(t_philo *philo, t_data *data)
 	pthread_mutex_unlock(&data->write);
 	if (data->pars->time_die < data->pars->time_sleep)
 		return (true);
-	ft_usleep(data->pars->time_sleep);
+	ft_usleep(data->pars->time_sleep, data);
 	if (statut_thread(data))
 		return (true);
 	return (false);
@@ -43,6 +43,7 @@ bool	think(t_philo *philo, t_data *data)
 	id = philo->data->philo[philo->id].id + 1;
 	printf("%u %d is thinking\n", get_ms(data), id);
 	pthread_mutex_unlock(&data->write);
+	ft_usleep(data->pars->time_think, data);
 	return (false);
 }
 
@@ -65,7 +66,7 @@ bool	eating(t_data *data, t_philo *philo)
 	pthread_mutex_unlock(&data->update);
 	if (data->pars->time_die < data->pars->time_eat)
 		return (true);
-	ft_usleep(data->pars->time_eat);
+	ft_usleep(data->pars->time_eat, data);
 	if (statut_thread(data))
 		return (true);
 	return (false);

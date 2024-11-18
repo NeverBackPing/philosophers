@@ -24,20 +24,6 @@ bool	statut_thread(t_data *data)
 	return (false);
 }
 
-bool	statut_thread_fork(t_philo *philo, t_data *data)
-{
-	pthread_mutex_lock(&data->update);
-	if ((data->dead) || (data->meal))
-	{
-		pthread_mutex_unlock(&data->write);
-		unlock_fork_mutex(philo, data->pars);
-		pthread_mutex_unlock(&data->update);
-		return (true);
-	}
-	pthread_mutex_unlock(&data->update);
-	return (false);
-}
-
 void	join_thread(t_data *data)
 {
 	uint8_t	i;

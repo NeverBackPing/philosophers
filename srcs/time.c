@@ -37,12 +37,16 @@ unsigned int	get_ms(t_data *data)
 	return (current_time - data->pars->start_time);
 }
 
-int	ft_usleep(unsigned int milliseconds)
+int	ft_usleep(unsigned int milliseconds, t_data *data)
 {
 	unsigned int	start;
 
 	start = get_current_time();
 	while ((get_current_time() - start) < milliseconds)
+	{
+		if (statut_thread(data))
+			return (true);
 		usleep(500);
+	}
 	return (0);
 }

@@ -30,6 +30,8 @@ bool	init_program(t_data *data, t_pars *pars, char **av, int ac)
 		return (writer_error(DATA_ERR), FAIL);
 	if (!(init_mutex_monitor(data)))
 		return (FAIL);
+	pars->start_time = 0;
+	data->pars = pars;
 	start_time(pars);
 	return (SUCCESS);
 }

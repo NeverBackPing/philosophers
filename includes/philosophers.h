@@ -96,9 +96,8 @@ void			*routine(void *data);
 void			destroy_mutex(t_data *data);
 void			join_thread(t_data	*data);
 bool			statut_thread(t_data *data);
-bool			statut_thread_fork(t_philo *philo, t_data *data);
 //Time
-int				ft_usleep(unsigned int milliseconds);
+int				ft_usleep(unsigned int milliseconds, t_data *data);
 unsigned int	get_ms(t_data *data);
 unsigned int	get_current_time(void);
 void			start_time(t_pars *pars);
