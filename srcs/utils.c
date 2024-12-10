@@ -51,6 +51,7 @@ bool	eating(t_data *data, t_philo *philo)
 {
 	if (statut_thread(data) || data->pars->nb_philo == 1)
 		return (true);
+	ft_usleep(data->pars->time_eat, data);
 	if (lock_fork_mutex(philo, data->pars))
 		return (true);
 	pthread_mutex_lock(&data->write);
@@ -66,7 +67,6 @@ bool	eating(t_data *data, t_philo *philo)
 	pthread_mutex_unlock(&data->update);
 	if (data->pars->time_die < data->pars->time_eat)
 		return (true);
-	ft_usleep(data->pars->time_eat, data);
 	if (statut_thread(data))
 		return (true);
 	return (false);
